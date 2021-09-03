@@ -74,13 +74,13 @@ class ConvertRdf extends Process {
     GetProjectModelsResponse response =
         RefineCommands.getProjectModels().setProject(project).build().execute(client);
 
-    JsonNode mapping = response.getOverlayModels().findValue("mappingDefinition");
+    JsonNode rdfMapping = response.getOverlayModels().findValue("mappingDefinition");
 
-    if (mapping == null || mapping.isNull() || mapping.isMissingNode()) {
+    if (rdfMapping == null || rdfMapping.isNull() || rdfMapping.isMissingNode()) {
       throw new RefineException("Failed to retrieve the mapping for project: '%s'", project);
     }
 
-    return mapping.toString();
+    return rdfMapping.toString();
   }
 
   private String readFile() throws RefineException {

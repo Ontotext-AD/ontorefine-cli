@@ -10,12 +10,13 @@ import picocli.CommandLine;
  */
 @CommandLine.Command(name = "ontorefine-cli",
     subcommands = { CreateProject.class, DeleteProject.class, Export.class,
-      ExtractOperations.class, ApplyOperations.class, Reconcile.class, ConvertRdf.class,
-      RetrieveVersion.class, CommandLine.HelpCommand.class },
+        ExtractOperations.class, ApplyOperations.class, Reconcile.class, RegisterReconService.class,
+        ConvertRdf.class, RetrieveVersion.class, CommandLine.HelpCommand.class,},
     mixinStandardHelpOptions = true,
     separator = " ",
     versionProvider = VersionProvider.class)
 class Main implements Runnable {
+
   @Override
   public void run() {
     // won't be called, this command has subcommands

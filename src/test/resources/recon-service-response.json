@@ -1,0 +1,57 @@
+{
+  "defaultTypes": [
+    {
+      "id": "/all",
+      "name": "Test all"
+    }
+  ],
+  "extend": {
+    "property_settings": [
+      {
+        "default": 0,
+        "help_text": "Maximum number of values to return per row (0 for no limit)",
+        "label": "Limit",
+        "name": "limit",
+        "type": "number"
+      },
+      {
+        "choices": [
+          {
+            "name": "ID",
+            "value": "id"
+          },
+          {
+            "name": "Literal",
+            "value": "literal"
+          }
+        ],
+        "default": "literal",
+        "help_text": "Content type: ID or literal",
+        "label": "Content",
+        "name": "content",
+        "type": "select"
+      }
+    ],
+    "propose_properties": {
+      "service_path": "/extend/properties",
+      "service_url": "http://test-recon-service.com/reconcile"
+    }
+  },
+  "identifierSpace": "http://vocab.getty.edu/doc/#GVP_URLs_and_Prefixes",
+  "name": "Reconciliation Service",
+  "preview": {
+    "height": 200,
+    "url": "http://test-recon-service.com/reconcile/preview?id={{id}}",
+    "width": 350
+  },
+  "schemaSpace": "",
+  "suggest": {
+    "property": {
+      "service_path": "/suggest/property",
+      "service_url": "http://test-recon-service.com/reconcile"
+    }
+  },
+  "view": {
+    "url": "http://test-recon-service.com/reconcile/page/{{id}}"
+  }
+}

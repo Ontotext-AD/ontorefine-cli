@@ -3,11 +3,17 @@ package com.ontotext.refine.cli;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
-import com.ontotext.refine.client.command.operations.GetOperationsResponse;
+import com.ontotext.refine.client.command.models.GetProjectModelsResponse;
 import com.ontotext.refine.client.command.rdf.ExportRdfResponse;
+import com.ontotext.refine.client.command.rdf.ResultFormat;
 import com.ontotext.refine.client.exceptions.RefineException;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import org.apache.commons.io.FileUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
+import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 
@@ -28,7 +34,12 @@ class ConvertRdf extends Process {
       description = "The project whose data to convert.")
   private String project;
 
-  // TODO add mapping as parameter, if missing then try to retrieve one from the operations
+  @Option(
+      names = {"-m", "--mapping"},
+      description = "The mapping that will be used for the RDF conversion. The file should contain"
+          + " JSON configuration. If not provided the process will try to retrieve it from the"
+          + " project configurations, if it is defined there.")
+  private File mapping;
 
   @Override
   public Integer call() {
@@ -37,7 +48,8 @@ class ConvertRdf extends Process {
       ExportRdfResponse response = RefineCommands
           .exportRdf()
           .setProject(project)
-          .setMapping(getRdfMapping(getClient()).toString())
+          .setMapping(getRdfMapping(client))
+          .setFormat(ResultFormat.TURTLE)
           .build()
           .execute(client);
 
@@ -54,17 +66,31 @@ class ConvertRdf extends Process {
     return ExitCode.SOFTWARE;
   }
 
-  private JsonNode getRdfMapping(RefineClient client) throws RefineException {
-    GetOperationsResponse response =
-        RefineCommands.getOperations().setProject(project).build().execute(client);
-
-    JsonNode mapping = response.getContent().findValue("mapping");
-
-    if (mapping == null || mapping.isNull() || mapping.isMissingNode()) {
-      throw new RefineException(
-          String.format("Failed to retrieve the mapping for project: '%s'", project));
+  private String getRdfMapping(RefineClient client) throws RefineException {
+    if (mapping != null) {
+      return readFile();
     }
 
-    return mapping;
+    GetProjectModelsResponse response =
+        RefineCommands.getProjectModels().setProject(project).build().execute(client);
+
+    JsonNode mapping = response.getOverlayModels().findValue("mappingDefinition");
+
+    if (mapping == null || mapping.isNull() || mapping.isMissingNode()) {
+      throw new RefineException("Failed to retrieve the mapping for project: '%s'", project);
+    }
+
+    return mapping.toString();
+  }
+
+  private String readFile() throws RefineException {
+    try {
+      return FileUtils.readFileToString(mapping, StandardCharsets.UTF_8);
+    } catch (IOException ioe) {
+      throw new RefineException(
+          "Failed to read the mapping from the file: '%s' for project: '%s'",
+          mapping.getName(),
+          project);
+    }
   }
 }

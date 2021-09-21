@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;

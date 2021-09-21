@@ -85,9 +85,11 @@ class ExportTest extends BaseProcessTest {
     } finally {
       shouldFailOperationsExtraction = false;
 
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
       assertEquals(
           "Failed to export data for project: '1812661014997' due to: 'Connection reset'",
-          consoleErrors().trim());
+          lastLine);
     }
   }
 

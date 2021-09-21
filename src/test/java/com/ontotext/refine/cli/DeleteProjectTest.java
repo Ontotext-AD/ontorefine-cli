@@ -83,8 +83,9 @@ class DeleteProjectTest extends BaseProcessTest {
     } finally {
       shouldRespondWithError = false;
 
-      String error = consoleErrors().split(System.lineSeparator())[0];
-      assertEquals("Failed to delete project with id '1812661014997' due to: Failed!", error);
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals("Failed to delete project with id '1812661014997' due to: Failed!", lastLine);
     }
   }
 

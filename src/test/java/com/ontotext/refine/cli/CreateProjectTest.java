@@ -64,11 +64,12 @@ class CreateProjectTest extends BaseProcessTest {
     } finally {
       failCsrfRequest = false;
 
-      String error = consoleErrors().split(System.lineSeparator())[0];
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
       assertEquals(
           "Failed to retrieve CSRF token due to: Unexpected response :"
               + " HTTP/1.1 500 Internal Server Error",
-          error);
+          lastLine);
     }
   }
 

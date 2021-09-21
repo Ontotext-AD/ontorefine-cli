@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.HttpStatus;
@@ -64,10 +65,12 @@ class ConvertRdfTest extends BaseProcessTest {
     } finally {
       shouldFailOperationsExtraction = false;
 
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
       assertEquals(
-          "Failed to retrieve the operations for project: '1812661014997' due to:"
+          "Failed to retrieve the models for project: '1812661014997' due to:"
               + " Unexpected response : HTTP/1.1 500 Internal Server Error",
-          consoleErrors().trim());
+          lastLine.trim());
     }
   }
 
@@ -75,8 +78,25 @@ class ConvertRdfTest extends BaseProcessTest {
   @ExpectSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() throws IOException {
     try {
-      commandExecutor()
-          .accept(args(PROJECT_ID, "-u " + responder.getUri()));
+      commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
+    } finally {
+      String errors = consoleErrors();
+      assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
+
+      assertFalse(consoleOutput().isEmpty(), "The output should not be empty, but it was.");
+    }
+  }
+
+  @Test
+  @ExpectSystemExit(ExitCode.OK)
+  void shouldPassSuccessfullyProvidedMapping() throws IOException {
+    try {
+      URL resource = getClass().getClassLoader().getResource("rdf-mapping.json");
+
+      String modelArg = "-m " + resource.getPath();
+      String uriArg = "-u " + responder.getUri();
+
+      commandExecutor().accept(args(PROJECT_ID, modelArg, uriArg));
     } finally {
       String errors = consoleErrors();
       assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
@@ -87,12 +107,12 @@ class ConvertRdfTest extends BaseProcessTest {
 
   private static Map<String, HttpRequestHandler> mockResponses() {
     Map<String, HttpRequestHandler> handlers = new HashMap<>();
-    handlers.put("/orefine/command/core/get-operations", extractOperations());
+    handlers.put("/orefine/command/core/get-models", getModels());
     handlers.put("/rest/rdf-mapper/rdf/ontorefine:" + PROJECT_ID, exportHandler());
     return handlers;
   }
 
-  private static HttpRequestHandler extractOperations() {
+  private static HttpRequestHandler getModels() {
     return (request, response, context) -> {
       if (shouldFailOperationsExtraction) {
         response.setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
@@ -100,7 +120,7 @@ class ConvertRdfTest extends BaseProcessTest {
         response.setStatusCode(HttpStatus.SC_OK);
         BasicHttpEntity entity = new BasicHttpEntity();
         InputStream stream =
-            ConvertRdfTest.class.getClassLoader().getResourceAsStream("operations.json");
+            ConvertRdfTest.class.getClassLoader().getResourceAsStream("models.json");
         entity.setContent(stream);
         entity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
         response.setEntity(entity);

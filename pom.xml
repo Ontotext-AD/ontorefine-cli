@@ -34,7 +34,7 @@
         <url>https://github.com/Ontotext-AD/ontorefine-cli</url>
     </scm>
 
-    <!-- TODO not sure that we are going to release this one here or in that
+    <!-- TODO not sure that we are going to release this one here or in that 
         matter anywhere -->
     <distributionManagement>
         <repository>
@@ -44,7 +44,8 @@
         </repository>
     </distributionManagement>
 
-    <!-- 'all-onto' is the repository from where the 'ontorefine-client' will be download -->
+    <!-- 'all-onto' is the repository from where the 'ontorefine-client' 
+        will be download -->
     <repositories>
         <repository>
             <id>all-onto</id>
@@ -90,9 +91,10 @@
         <dependency.check.plugin.version>6.2.2</dependency.check.plugin.version>
         <jacoco.version>0.8.7</jacoco.version>
 
-        <ontorefine.client.version>1.0.0</ontorefine.client.version>
+        <ontorefine.client.version>1.1.0</ontorefine.client.version>
         <picocli.version>4.6.1</picocli.version>
 
+        <slf4j.version>1.7.32</slf4j.version>
         <junit.jupiter.version>5.7.1</junit.jupiter.version>
         <mockito.version>3.8.0</mockito.version>
 
@@ -147,6 +149,22 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- There is something wrong with the loggers which causes some 
+            parasitic prints in the console -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

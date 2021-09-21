@@ -8,7 +8,6 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;
@@ -40,8 +39,8 @@ class RetrieveVersionTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return RetrieveVersion::main;
+  protected Class<?> command() {
+    return RetrieveVersion.class;
   }
 
   @Test
@@ -53,7 +52,7 @@ class RetrieveVersionTest extends BaseProcessTest {
       String expected =
           "Name: OpenRefine 2.6 [1]\nFull version: 2.6 [1]\nVersion: 2.6\nRevision: 1";
       String consoleOutput = consoleOutput();
-      assertEquals(expected, consoleOutput.stripTrailing());
+      assertEquals(expected, consoleOutput.trim());
     }
   }
 
@@ -69,7 +68,7 @@ class RetrieveVersionTest extends BaseProcessTest {
 
       String expected = "Failed to retrieve the version data due to: "
           + "Unexpected response : HTTP/1.1 500 Internal Server Error";
-      assertEquals(expected, consoleErrors().stripTrailing());
+      assertEquals(expected, consoleErrors().trim());
     }
   }
 

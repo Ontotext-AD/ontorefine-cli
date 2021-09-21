@@ -7,10 +7,9 @@ import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.operations.ApplyOperationsResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
-import java.io.FileReader;
+import java.io.FileInputStream;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.IOUtils;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
@@ -23,9 +22,8 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "apply",
-    description = "Applies transformation operations to specific project.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
+    description = "Applies transformation operations to a project.",
+    separator = " ")
 class ApplyOperations extends Process {
 
   @Parameters(
@@ -46,7 +44,7 @@ class ApplyOperations extends Process {
   @Override
   public Integer call() throws Exception {
     try (RefineClient client = getClient()) {
-      String ops = IOUtils.toString(new FileReader(operations, StandardCharsets.UTF_8));
+      String ops = IOUtils.toString(new FileInputStream(operations), StandardCharsets.UTF_8);
 
       ApplyOperationsResponse response = RefineCommands
           .applyOperations()
@@ -58,7 +56,7 @@ class ApplyOperations extends Process {
 
       if (ResponseCode.ERROR.equals(response.getCode())) {
         String error = String.format(
-            "Failed to apply transformation to the project '%s' due to: %s",
+            "Failed to apply transformation to project '%s' due to: %s",
             project,
             response.getMessage());
 
@@ -72,14 +70,5 @@ class ApplyOperations extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
-  }
-
-  /**
-   * Runs the apply operations command.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new ApplyOperations()).execute(args));
   }
 }

@@ -43,8 +43,8 @@ class ApplyOperationsTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return ApplyOperations::main;
+  protected Class<?> command() {
+    return ApplyOperations.class;
   }
 
   @Test
@@ -102,7 +102,7 @@ class ApplyOperationsTest extends BaseProcessTest {
 
       String error = consoleErrors().split(System.lineSeparator())[0];
       assertEquals(
-          "Failed to apply transformation to the project '1812661014997' due to: Failed!", error);
+          "Failed to apply transformation to project '1812661014997' due to: Failed!", error);
     }
   }
 

@@ -4,7 +4,6 @@ import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.version.GetVersionResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 
@@ -17,8 +16,8 @@ import picocli.CommandLine.ExitCode;
 @Command(
     name = "version",
     description = "Retrieves the version of the OntoRefine instance.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
+    separator = " ",
+    hidden = true)
 class RetrieveVersion extends Process {
 
   @Override
@@ -35,14 +34,5 @@ class RetrieveVersion extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
-  }
-
-  /**
-   * Runs the version retrieval process.
-   *
-   * @param args to be passed to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new RetrieveVersion()).execute(args));
   }
 }

@@ -4,28 +4,26 @@ import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.operations.GetOperationsResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
 
 /**
- * Defines the export operations process and all of the required arguments for it.
+ * Defines the extract operations process and all of the required arguments for it.
  *
  * @author Antoniy Kunchev
  */
 @Command(
-    name = "exportOperations",
-    description = "Exports the operations of specified project in JSON format.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
-class ExportOperations extends Process {
+    name = "extract",
+    description = "Extracts the operations of a project in JSON format.",
+    separator = " ")
+class ExtractOperations extends Process {
 
   @Parameters(
       index = "0",
       paramLabel = "PROJECT",
-      description = "The project which operations should be exported.")
+      description = "The project whose operations to extract.")
   private String project;
 
   @Override
@@ -41,14 +39,5 @@ class ExportOperations extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
-  }
-
-  /**
-   * Runs the export operation process.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new ExportOperations()).execute(args));
   }
 }

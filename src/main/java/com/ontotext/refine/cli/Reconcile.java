@@ -11,7 +11,6 @@ import com.ontotext.refine.client.command.reconcile.ReconcileCommand.ColumnType;
 import com.ontotext.refine.client.command.reconcile.ReconcileCommandResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.util.Collection;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
@@ -26,8 +25,7 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "reconcile",
     description = "Performs reconciliation over the project data.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
+    separator = " ")
 class Reconcile extends Process {
 
   private static final int SLEEP_T = 2000;
@@ -36,14 +34,14 @@ class Reconcile extends Process {
       index = "0",
       arity = "1",
       paramLabel = "PROJECT",
-      description = "The identifier of the project which should be reconciled.")
+      description = "The identifier of the project whose data to reconcile.")
   private String project;
 
   @Parameters(
       index = "1",
       arity = "1",
       paramLabel = "COLUMN",
-      description = "The identifier of the column that should be reconciled.")
+      description = "The identifier of the column to reconcile.")
   private String column;
 
   @Parameters(
@@ -55,7 +53,7 @@ class Reconcile extends Process {
 
   @Option(
       names = {"-a", "--async"},
-      description = "Whether to execute the operation asynchronous and output the progress.",
+      description = "Whether to execute the operation asynchronously and output the progress.",
       defaultValue = "false")
   private Boolean async;
 
@@ -172,14 +170,5 @@ class Reconcile extends Process {
         .setToken(getToken())
         .build()
         .execute(client);
-  }
-
-  /**
-   * Runs the reconcile operation process.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new Reconcile()).execute(args));
   }
 }

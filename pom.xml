@@ -34,7 +34,7 @@
         <url>https://github.com/Ontotext-AD/ontorefine-cli</url>
     </scm>
 
-    <!-- TODO not sure that we are going to release this one here or in that 
+    <!-- TODO not sure that we are going to release this one here or in that
         matter anywhere -->
     <distributionManagement>
         <repository>
@@ -70,8 +70,8 @@
     </repositories>
 
     <properties>
-        <java.version>11</java.version>
-        <project.java.version>11</project.java.version>
+        <java.version>8</java.version>
+        <project.java.version>8</project.java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cvss.threshold>6.9</cvss.threshold>

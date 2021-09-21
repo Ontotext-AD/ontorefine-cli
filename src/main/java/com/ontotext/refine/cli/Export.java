@@ -7,7 +7,6 @@ import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
@@ -20,21 +19,20 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "export",
-    description = "Exports the data of specified project in specific format.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
+    description = "Exports the data of a project in CSV or JSON format.",
+    separator = " ")
 class Export extends Process {
 
   @Parameters(
       index = "0",
       paramLabel = "PROJECT",
-      description = "The identifier of the project to which the data should be exported.")
+      description = "The identifier of the project to export.")
   private String project;
 
   @Parameters(
       index = "1",
       paramLabel = "FORMAT",
-      description = "The output format in which the data should be exported.")
+      description = "The output format of the export (csv or json).")
   private String format;
 
   @Override
@@ -71,14 +69,5 @@ class Export extends Process {
 
   private boolean isFormatSupported() {
     return "csv".equalsIgnoreCase(format) || "json".equalsIgnoreCase(format);
-  }
-
-  /**
-   * Runs the export command.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new Export()).execute(args));
   }
 }

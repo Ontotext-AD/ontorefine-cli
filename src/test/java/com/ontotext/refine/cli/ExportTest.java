@@ -8,7 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;
@@ -40,8 +39,8 @@ class ExportTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return Export::main;
+  protected Class<?> command() {
+    return Export.class;
   }
 
   @Test
@@ -72,7 +71,7 @@ class ExportTest extends BaseProcessTest {
     } finally {
       assertEquals(
           "The format: 'xml' is currently not supported.",
-          consoleErrors().stripTrailing());
+          consoleErrors().trim());
     }
   }
 
@@ -88,7 +87,7 @@ class ExportTest extends BaseProcessTest {
 
       assertEquals(
           "Failed to export data for project: '1812661014997' due to: 'Connection reset'",
-          consoleErrors().stripTrailing());
+          consoleErrors().trim());
     }
   }
 
@@ -101,7 +100,7 @@ class ExportTest extends BaseProcessTest {
       String errors = consoleErrors();
       assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
 
-      assertEquals("CSV-content", consoleOutput().stripTrailing());
+      assertEquals("CSV-content", consoleOutput().trim());
     }
   }
 

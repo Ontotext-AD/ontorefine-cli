@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;
@@ -55,8 +54,8 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return Reconcile::main;
+  protected Class<?> command() {
+    return Reconcile.class;
   }
 
   @Test
@@ -170,7 +169,7 @@ class ReconcileTest extends BaseProcessTest {
 
       String expected = String.format(
           "Failed to guess the type of the column: '%s' for project: '%s'", COLUMN, PROJECT_ID);
-      assertEquals(expected, consoleErrors().stripTrailing());
+      assertEquals(expected, consoleErrors().trim());
     }
   }
 
@@ -188,7 +187,7 @@ class ReconcileTest extends BaseProcessTest {
               + " due to: Guess types error.",
           COLUMN,
           PROJECT_ID);
-      assertEquals(expected, consoleErrors().stripTrailing());
+      assertEquals(expected, consoleErrors().trim());
     }
   }
 
@@ -205,7 +204,7 @@ class ReconcileTest extends BaseProcessTest {
           "Failed to reconcile column '%s' for project '%s' due to: Reconcile error.",
           COLUMN,
           PROJECT_ID);
-      assertEquals(expected, consoleErrors().stripTrailing());
+      assertEquals(expected, consoleErrors().trim());
     }
   }
 

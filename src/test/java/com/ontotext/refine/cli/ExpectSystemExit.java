@@ -74,8 +74,12 @@ public @interface ExpectSystemExit {
     }
 
     private Optional<ExpectSystemExit> getAnnotation(ExtensionContext context) {
-      return findAnnotation(context.getTestMethod(), ExpectSystemExit.class)
-          .or(() -> findAnnotation(context.getTestClass(), ExpectSystemExit.class));
+      Optional<ExpectSystemExit> opt = findAnnotation(context.getTestMethod(),
+          ExpectSystemExit.class);
+      if (!opt.isPresent()) {
+        opt = findAnnotation(context.getTestClass(), ExpectSystemExit.class);
+      }
+      return opt;
     }
 
     @Override

@@ -5,11 +5,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.function.Consumer;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import picocli.CommandLine;
 import picocli.CommandLine.ExitCode;
 
 
@@ -26,18 +30,30 @@ abstract class BaseProcessTest {
   private ByteArrayOutputStream errorsOs;
   private String errorsAsStr;
 
-  private PrintStream consoleOut = System.out;
-  private PrintStream consoleErr = System.err;
+  protected final PrintStream consoleOut = System.out;
+  protected final PrintStream consoleErr = System.err;
 
   protected static final String PROJECT_ID = "1812661014997";
 
+  protected final Consumer<String[]> commandExecutor() {
+    return cmdArgs -> {
+      List<String> args = new ArrayList<>();
+      Class<?> commandClass = command();
+      if (commandClass != null) {
+        args.add(commandClass.getAnnotation(CommandLine.Command.class).name());
+      }
+      args.addAll(Arrays.asList(cmdArgs));
+      Main.main(args.toArray(new String[0]));
+    };
+  }
+
   /**
-   * Provides the executor for the commands. Used for base tests defined in the current class. The
-   * base implementation of this method should be <code>CommandClass::main</code>.
+   * Provides the class for the commands. Used for base tests defined in the current class.
+   * The command name will be extracted from the @Command annotation and passed to Main::main.
    *
-   * @return the command executor
+   * @return the command class
    */
-  protected abstract Consumer<String[]> commandExecutor();
+  protected abstract Class<?> command();
 
   @BeforeEach
   void init() {
@@ -56,11 +72,11 @@ abstract class BaseProcessTest {
 
   @Test
   @ExpectSystemExit(ExitCode.USAGE)
-  void shouldFailOnMissingRefineUri() {
+  protected void shouldFailOnMissingRefineUrl() {
     try {
       commandExecutor().accept(new String[0]);
     } finally {
-      assertTrue(assertMissingArgError().contains("'--uri=<uri>'"));
+      assertTrue(assertMissingArgError().contains("'--url <url>'"));
     }
   }
 
@@ -90,7 +106,7 @@ abstract class BaseProcessTest {
    */
   protected final String consoleOutput() {
     if (consoleOutputAsStr == null) {
-      consoleOutputAsStr = outputOs.toString(StandardCharsets.UTF_8);
+      consoleOutputAsStr = new String(outputOs.toByteArray(), StandardCharsets.UTF_8);
     }
     return consoleOutputAsStr;
   }
@@ -102,7 +118,7 @@ abstract class BaseProcessTest {
    */
   protected final String consoleErrors() {
     if (errorsAsStr == null) {
-      errorsAsStr = errorsOs.toString(StandardCharsets.UTF_8);
+      errorsAsStr = new String(errorsOs.toByteArray(), StandardCharsets.UTF_8);
     }
     return errorsAsStr;
   }

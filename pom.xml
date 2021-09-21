@@ -6,7 +6,7 @@
 
     <groupId>com.ontotext</groupId>
     <artifactId>ontorefine-cli</artifactId>
-    <version>1.0.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A command-line interface for execution of operations in OntoRefine tool</description>
@@ -22,7 +22,6 @@
     <developers>
         <developer>
             <name>The Ontotext Team</name>
-            <email><!-- TODO --></email>
             <organization>Ontotext-AD</organization>
             <organizationUrl>https://github.com/Ontotext-AD</organizationUrl>
         </developer>
@@ -34,18 +33,7 @@
         <url>https://github.com/Ontotext-AD/ontorefine-cli</url>
     </scm>
 
-    <!-- TODO not sure that we are going to release this one here or in that 
-        matter anywhere -->
-    <distributionManagement>
-        <repository>
-            <id>all-onto</id>
-            <name>Ontotext Public Maven</name>
-            <url>http://maven.ontotext.com/content/repositories/public</url>
-        </repository>
-    </distributionManagement>
-
-    <!-- 'all-onto' is the repository from where the 'ontorefine-client' 
-        will be download -->
+    <!-- 'all-onto' is the repository from where the 'ontorefine-client' will be download -->
     <repositories>
         <repository>
             <id>all-onto</id>
@@ -87,7 +75,7 @@
         <maven.resources.plugin.version>3.2.0</maven.resources.plugin.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
         <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-        <maven.shade.plugin.version>3.2.4</maven.shade.plugin.version>
+        <maven.release.plugin.version>3.0.0-M4</maven.release.plugin.version>
         <dependency.check.plugin.version>6.2.2</dependency.check.plugin.version>
         <jacoco.version>0.8.7</jacoco.version>
 
@@ -99,6 +87,9 @@
         <mockito.version>3.8.0</mockito.version>
 
         <checkstyle.enabled>true</checkstyle.enabled>
+
+        <internal.repo>https://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
+        <snapshots.repo>https://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
     </properties>
 
     <profiles>
@@ -152,7 +143,7 @@
             <scope>test</scope>
         </dependency>
 
-        <!-- There is something wrong with the loggers which causes some 
+        <!-- There is something wrong with the loggers which causes some
             parasitic prints in the console -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -199,30 +190,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-release-plugin</artifactId>
+                <version>${maven.release.plugin.version}</version>
                 <configuration>
-                    <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <useReleaseProfile>false</useReleaseProfile>
-                    <releaseProfiles>release</releaseProfiles>
-                    <goals>deploy</goals>
+                    <tagNameFormat>@{project.version}</tagNameFormat>
                 </configuration>
-            </plugin>
-
-            <!-- Builds an executable jar with all dependencies -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven.shade.plugin.version}</version>
-                <configuration>
-                    <createDependencyReducedPom>false</createDependencyReducedPom>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                    </execution>
-                </executions>
             </plugin>
 
             <!-- Verifies the code quality on project building -->
@@ -294,6 +265,19 @@
             </plugin>
         </plugins>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>internal</id>
+            <name>OWLIM Releases repository</name>
+            <url>${internal.repo}</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>OWLIM Snapshots repository</name>
+            <url>${snapshots.repo}</url>
+        </snapshotRepository>
+    </distributionManagement>
 
     <reporting>
         <plugins>

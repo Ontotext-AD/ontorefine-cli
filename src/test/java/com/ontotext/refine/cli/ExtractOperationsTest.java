@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
@@ -20,11 +19,11 @@ import picocli.CommandLine.ExitCode;
 
 
 /**
- * Test for {@link ExportOperations}.
+ * Test for {@link ExtractOperations}.
  *
  * @author Antoniy Kunchev
  */
-class ExportOperationsTest extends BaseProcessTest {
+class ExtractOperationsTest extends BaseProcessTest {
 
   private static RefineResponder responder = new RefineResponder();
   private static boolean shouldFailExportRequest;
@@ -41,8 +40,8 @@ class ExportOperationsTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return ExportOperations::main;
+  protected Class<?> command() {
+    return ExtractOperations.class;
   }
 
   @Test
@@ -68,7 +67,7 @@ class ExportOperationsTest extends BaseProcessTest {
       assertEquals(
           "Failed to retrieve the operations for project: '1812661014997' due to:"
               + " Unexpected response : HTTP/1.1 500 Internal Server Error",
-          consoleErrors().stripTrailing());
+          consoleErrors().trim());
     }
   }
 
@@ -97,7 +96,7 @@ class ExportOperationsTest extends BaseProcessTest {
         response.setStatusCode(HttpStatus.SC_OK);
         BasicHttpEntity entity = new BasicHttpEntity();
         InputStream stream =
-            ExportOperationsTest.class.getClassLoader().getResourceAsStream("operations.json");
+            ExtractOperationsTest.class.getClassLoader().getResourceAsStream("operations.json");
         entity.setContent(stream);
         entity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
         response.setEntity(entity);

@@ -7,7 +7,6 @@ import com.ontotext.refine.client.command.create.CreateProjectResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import org.apache.commons.lang3.StringUtils;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
@@ -22,20 +21,20 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "create",
     description = "Creates a new project from a file.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
+    separator = " ")
 class CreateProject extends Process {
 
   @Parameters(
       index = "0",
       paramLabel = "FILE",
-      description = "The file which will be used to create the project."
-          + " It should be full name with extension (csv, tsv, xml, json, txt, xls, xlsx, ods).")
+      description = "The file that will be used to create the project."
+          + " It should be a full name with one of the supported extensions"
+          + " (csv, tsv, xml, json, txt, xls, xlsx, ods).")
   private File file;
 
   @Option(
       names = {"-n", "--name"},
-      description = "The name with which the project will be created. If not provided,"
+      description = "The name of the OntoRefine project to create. If not provided,"
           + " the file name will be used.")
   private String name;
 
@@ -65,14 +64,5 @@ class CreateProject extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
-  }
-
-  /**
-   * Runs the creation of project command.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new CreateProject()).execute(args));
   }
 }

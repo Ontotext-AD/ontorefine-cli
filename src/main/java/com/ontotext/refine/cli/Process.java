@@ -21,11 +21,10 @@ abstract class Process implements Callable<Integer> {
   private RefineClient client;
 
   @Option(
-      names = {"-u", "--uri"},
-      description = "The URI to the OntoRefine instance."
-          + " It should include the protocol, host, port and context path if needed.",
+      names = {"-u", "--url"},
+      description = "The URL of the GraphDB instance whose OntoRefine to connect to, e.g. http://localhost:7200.",
       required = true)
-  private String uri;
+  private String url;
 
   /**
    * Creates {@link RefineClient} instance and caches it in order to be reused if there are
@@ -37,7 +36,7 @@ abstract class Process implements Callable<Integer> {
   protected RefineClient getClient() throws RefineException {
     if (client == null) {
       try {
-        client = RefineClients.create(uri);
+        client = RefineClients.create(url);
       } catch (Exception exc) {
         throw new RefineException("Failed to get client instance due to: " + exc.getMessage());
       }

@@ -5,7 +5,6 @@ import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.delete.DeleteProjectResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
@@ -18,15 +17,14 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "delete",
-    description = "Deletes specific project from OntoRefine.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
+    description = "Deletes a project from OntoRefine.",
+    separator = " ")
 class DeleteProject extends Process {
 
   @Parameters(
       index = "0",
       paramLabel = "PROJECT",
-      description = "The identifier of the project which should be deleted.")
+      description = "The identifier of the project to delete.")
   private String project;
 
   @Override
@@ -53,14 +51,5 @@ class DeleteProject extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
-  }
-
-  /**
-   * Runs the deletion of project command.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new DeleteProject()).execute(args));
   }
 }

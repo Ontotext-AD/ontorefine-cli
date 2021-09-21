@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ContentType;
@@ -20,11 +19,11 @@ import picocli.CommandLine.ExitCode;
 
 
 /**
- * Test for {@link ExportRdf}.
+ * Test for {@link ConvertRdf}.
  *
  * @author Antoniy Kunchev
  */
-class ExportRdfTest extends BaseProcessTest {
+class ConvertRdfTest extends BaseProcessTest {
 
   private static RefineResponder responder = new RefineResponder();
   private static boolean shouldFailOperationsExtraction;
@@ -41,8 +40,8 @@ class ExportRdfTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return ExportRdf::main;
+  protected Class<?> command() {
+    return ConvertRdf.class;
   }
 
   @Test
@@ -68,7 +67,7 @@ class ExportRdfTest extends BaseProcessTest {
       assertEquals(
           "Failed to retrieve the operations for project: '1812661014997' due to:"
               + " Unexpected response : HTTP/1.1 500 Internal Server Error",
-          consoleErrors().stripTrailing());
+          consoleErrors().trim());
     }
   }
 
@@ -101,7 +100,7 @@ class ExportRdfTest extends BaseProcessTest {
         response.setStatusCode(HttpStatus.SC_OK);
         BasicHttpEntity entity = new BasicHttpEntity();
         InputStream stream =
-            ExportRdfTest.class.getClassLoader().getResourceAsStream("operations.json");
+            ConvertRdfTest.class.getClassLoader().getResourceAsStream("operations.json");
         entity.setContent(stream);
         entity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
         response.setEntity(entity);
@@ -114,7 +113,7 @@ class ExportRdfTest extends BaseProcessTest {
       response.setStatusCode(HttpStatus.SC_OK);
       BasicHttpEntity entity = new BasicHttpEntity();
       InputStream stream =
-          ExportRdfTest.class.getClassLoader().getResourceAsStream("exportedRdf.ttl");
+          ConvertRdfTest.class.getClassLoader().getResourceAsStream("exportedRdf.ttl");
       entity.setContent(stream);
       response.setEntity(entity);
     };

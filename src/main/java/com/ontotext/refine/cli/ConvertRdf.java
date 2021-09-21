@@ -6,28 +6,26 @@ import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.operations.GetOperationsResponse;
 import com.ontotext.refine.client.command.rdf.ExportRdfResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
 
 /**
- * Defines the export RDF process and all of the required arguments for it.
+ * Defines the convert RDF process and all of the required arguments for it.
  *
  * @author Antoniy Kunchev
  */
 @Command(
-    name = "exportRdf",
-    description = "Exports the data of specified project in RDF format.",
-    version = "1.0.0",
-    mixinStandardHelpOptions = true)
-class ExportRdf extends Process {
+    name = "rdf",
+    description = "Converts the data of a project to RDF format.",
+    separator = " ")
+class ConvertRdf extends Process {
 
   @Parameters(
       index = "0",
       paramLabel = "PROJECT",
-      description = "The project which data should be exported.")
+      description = "The project whose data to convert.")
   private String project;
 
   // TODO add mapping as parameter, if missing then try to retrieve one from the operations
@@ -49,7 +47,8 @@ class ExportRdf extends Process {
       System.err.println(re.getMessage());
     } catch (Exception exc) {
       String error = String.format(
-          "Failed to execute RDF export for project: '%s' due to %s", project, exc.getMessage());
+          "Failed to execute RDF conversion for project: '%s' due to %s", project,
+          exc.getMessage());
       System.err.println(error);
     }
     return ExitCode.SOFTWARE;
@@ -67,14 +66,5 @@ class ExportRdf extends Process {
     }
 
     return mapping;
-  }
-
-  /**
-   * Runs the export RDF process.
-   *
-   * @param args to pass to the process
-   */
-  public static void main(String[] args) {
-    System.exit(new CommandLine(new ExportRdf()).execute(args));
   }
 }

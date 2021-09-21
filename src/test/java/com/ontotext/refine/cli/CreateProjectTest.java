@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
@@ -39,8 +38,8 @@ class CreateProjectTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return CreateProject::main;
+  protected Class<?> command() {
+    return CreateProject.class;
   }
 
   @Test
@@ -87,7 +86,7 @@ class CreateProjectTest extends BaseProcessTest {
 
       assertEquals(
           "The project with id '1812661014997' was created successfully.",
-          consoleOutput().stripTrailing());
+          consoleOutput().trim());
     }
   }
 

@@ -8,7 +8,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.function.Consumer;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;
@@ -42,8 +41,8 @@ class DeleteProjectTest extends BaseProcessTest {
   }
 
   @Override
-  protected Consumer<String[]> commandExecutor() {
-    return DeleteProject::main;
+  protected Class<?> command() {
+    return DeleteProject.class;
   }
 
   @Test
@@ -96,7 +95,7 @@ class DeleteProjectTest extends BaseProcessTest {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
     } finally {
       assertEquals(
-          "Successfully deleted project with id: '1812661014997'", consoleOutput().stripTrailing());
+          "Successfully deleted project with id: '1812661014997'", consoleOutput().trim());
     }
   }
 

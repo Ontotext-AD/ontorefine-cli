@@ -28,8 +28,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:https://github.com/Ontotext-AD/ontorefine-cli.git</connection>
-        <developerConnection>scm:git:https://github.com/Ontotext-AD/ontorefine-cli.git</developerConnection>
+        <connection>scm:git:git@github.com:Ontotext-AD/ontorefine-cli.git</connection>
+        <developerConnection>scm:git:git@github.com:Ontotext-AD/ontorefine-cli.git</developerConnection>
         <url>https://github.com/Ontotext-AD/ontorefine-cli</url>
     </scm>
 

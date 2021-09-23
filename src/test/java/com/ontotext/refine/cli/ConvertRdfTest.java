@@ -4,6 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ontotext.refine.client.util.JsonParser;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -27,11 +30,13 @@ import picocli.CommandLine.ExitCode;
 class ConvertRdfTest extends BaseProcessTest {
 
   private static RefineResponder responder = new RefineResponder();
-  private static boolean shouldFailOperationsExtraction;
+  private static boolean shouldFailModelsExtraction;
+  private static boolean shouldNotContainOverlayModels;
+  private static boolean shouldNotContainMappingDef;
 
   @BeforeAll
   static void beforeAll() throws IOException {
-    shouldFailOperationsExtraction = false;
+    shouldFailModelsExtraction = false;
     responder.start(mockResponses());
   }
 
@@ -57,13 +62,13 @@ class ConvertRdfTest extends BaseProcessTest {
 
   @Test
   @ExpectSystemExit(ExitCode.SOFTWARE)
-  void shouldFailDuringOperationsExtraction() {
+  void shouldFailDuringModelsExtraction() {
     try {
-      shouldFailOperationsExtraction = true;
+      shouldFailModelsExtraction = true;
 
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
     } finally {
-      shouldFailOperationsExtraction = false;
+      shouldFailModelsExtraction = false;
 
       String[] errorsArray = consoleErrors().split(System.lineSeparator());
       String lastLine = errorsArray[errorsArray.length - 1];
@@ -71,6 +76,58 @@ class ConvertRdfTest extends BaseProcessTest {
           "Failed to retrieve the models for project: '1812661014997' due to:"
               + " Unexpected response : HTTP/1.1 500 Internal Server Error",
           lastLine.trim());
+    }
+  }
+
+  @Test
+  @ExpectSystemExit(ExitCode.SOFTWARE)
+  void shouldFailDuringMappingFileReading() {
+    try {
+      // passing directory as file to cause FileNotFoundException
+      URL directory = getClass().getClassLoader().getResource("./");
+
+      String modelArg = "-m " + directory.getPath();
+      String uriArg = "-u " + responder.getUri();
+
+      commandExecutor().accept(args(PROJECT_ID, modelArg, uriArg));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals(
+          "Failed to read the mapping from the file: 'test-classes' for project: '1812661014997'",
+          lastLine.trim());
+    }
+  }
+
+  @Test
+  @ExpectSystemExit(ExitCode.SOFTWARE)
+  void shouldFailDuringModelsExtraction_missingOverlayModels() {
+    try {
+      shouldNotContainOverlayModels = true;
+
+      commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
+    } finally {
+      shouldNotContainOverlayModels = false;
+
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals("Failed to retrieve the mapping for project: '1812661014997'", lastLine.trim());
+    }
+  }
+
+  @Test
+  @ExpectSystemExit(ExitCode.SOFTWARE)
+  void shouldFailDuringModelsExtraction_missingMappingDefinition() {
+    try {
+      shouldNotContainMappingDef = true;
+
+      commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
+    } finally {
+      shouldNotContainMappingDef = false;
+
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals("Failed to retrieve the mapping for project: '1812661014997'", lastLine.trim());
     }
   }
 
@@ -114,14 +171,23 @@ class ConvertRdfTest extends BaseProcessTest {
 
   private static HttpRequestHandler getModels() {
     return (request, response, context) -> {
-      if (shouldFailOperationsExtraction) {
+      if (shouldFailModelsExtraction) {
         response.setStatusCode(HttpStatus.SC_INTERNAL_SERVER_ERROR);
       } else {
         response.setStatusCode(HttpStatus.SC_OK);
         BasicHttpEntity entity = new BasicHttpEntity();
-        InputStream stream =
-            ConvertRdfTest.class.getClassLoader().getResourceAsStream("models.json");
-        entity.setContent(stream);
+        InputStream models = loadResource("models.json");
+        if (shouldNotContainOverlayModels) {
+          ObjectNode node = (ObjectNode) JsonParser.JSON_PARSER.parseJson(models);
+          node.remove("overlayModels");
+          entity.setContent(new ByteArrayInputStream(node.toString().getBytes()));
+        } else if (shouldNotContainMappingDef) {
+          ObjectNode node = (ObjectNode) JsonParser.JSON_PARSER.parseJson(models);
+          ((ObjectNode) node.findValue("overlayModels")).remove("mappingDefinition");
+          entity.setContent(new ByteArrayInputStream(node.toString().getBytes()));
+        } else {
+          entity.setContent(models);
+        }
         entity.setContentType(ContentType.APPLICATION_JSON.getMimeType());
         response.setEntity(entity);
       }
@@ -132,10 +198,12 @@ class ConvertRdfTest extends BaseProcessTest {
     return (request, response, context) -> {
       response.setStatusCode(HttpStatus.SC_OK);
       BasicHttpEntity entity = new BasicHttpEntity();
-      InputStream stream =
-          ConvertRdfTest.class.getClassLoader().getResourceAsStream("exportedRdf.ttl");
-      entity.setContent(stream);
+      entity.setContent(loadResource("exportedRdf.ttl"));
       response.setEntity(entity);
     };
+  }
+
+  private static InputStream loadResource(String resource) {
+    return ConvertRdfTest.class.getClassLoader().getResourceAsStream(resource);
   }
 }

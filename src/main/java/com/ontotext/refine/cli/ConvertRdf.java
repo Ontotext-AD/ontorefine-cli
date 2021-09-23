@@ -10,6 +10,8 @@ import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
+import java.util.Iterator;
 import org.apache.commons.io.FileUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
@@ -41,6 +43,14 @@ class ConvertRdf extends Process {
           + " project configurations, if it is defined there.")
   private File mapping;
 
+  @Option(
+      names = {"-f", "--format"},
+      description = "Controls the format of the result. The default format is '${DEFAULT-VALUE}'."
+          + " The allowed values are: ${COMPLETION-CANDIDATES}",
+      completionCandidates = AllowedFormatValues.class,
+      defaultValue = "turtle")
+  private ResultFormat format;
+
   @Override
   public Integer call() {
     try (RefineClient client = getClient()) {
@@ -49,7 +59,7 @@ class ConvertRdf extends Process {
           .exportRdf()
           .setProject(project)
           .setMapping(getRdfMapping(client))
-          .setFormat(ResultFormat.TURTLE)
+          .setFormat(format)
           .build()
           .execute(client);
 
@@ -74,13 +84,24 @@ class ConvertRdf extends Process {
     GetProjectModelsResponse response =
         RefineCommands.getProjectModels().setProject(project).build().execute(client);
 
-    JsonNode rdfMapping = response.getOverlayModels().findValue("mappingDefinition");
+    JsonNode rdfMapping = extractMapping(response);
 
-    if (rdfMapping == null || rdfMapping.isNull() || rdfMapping.isMissingNode()) {
+    if (rdfMapping == null) {
       throw new RefineException("Failed to retrieve the mapping for project: '%s'", project);
     }
 
     return rdfMapping.toString();
+  }
+
+  private JsonNode extractMapping(GetProjectModelsResponse response) {
+    JsonNode overlayModels = response.getOverlayModels();
+    if (overlayModels == null) {
+      return null;
+    }
+
+    // there are 2 wrapping object for the mapping...
+    JsonNode mappingDef = overlayModels.findValue("mappingDefinition");
+    return mappingDef != null ? mappingDef.findValue("mappingDefinition") : null;
   }
 
   private String readFile() throws RefineException {
@@ -91,6 +112,16 @@ class ConvertRdf extends Process {
           "Failed to read the mapping from the file: '%s' for project: '%s'",
           mapping.getName(),
           project);
+    }
+  }
+
+  private static class AllowedFormatValues implements Iterable<String> {
+
+    @Override
+    public Iterator<String> iterator() {
+      return Arrays.stream(ResultFormat.values())
+          .map(value -> value.toString().toLowerCase())
+          .iterator();
     }
   }
 }

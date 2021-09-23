@@ -23,7 +23,7 @@ class Main implements Runnable {
   }
 
   public static void main(String... args) {
-    final CommandLine cmd = new CommandLine(new Main());
+    final CommandLine cmd = new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true);
 
     if (args.length > 0) {
       System.exit(cmd.execute(args));

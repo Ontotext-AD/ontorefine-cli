@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link RegisterReconService}.
  *
@@ -49,7 +48,7 @@ class RegisterReconServiceTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingServiceArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -59,7 +58,7 @@ class RegisterReconServiceTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailServiceRegistration() {
     try {
       setPreferenceShouldFail = true;
@@ -78,7 +77,7 @@ class RegisterReconServiceTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldErrorDuringExecution() {
     try {
       shouldThrowErrorDuringExecution = true;
@@ -95,7 +94,7 @@ class RegisterReconServiceTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() throws IOException {
     try {
       commandExecutor().accept(args(reconServiceUri, "-u " + responder.getUri()));

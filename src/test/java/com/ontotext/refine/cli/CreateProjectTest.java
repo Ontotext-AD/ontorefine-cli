@@ -15,7 +15,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for the {@link CreateProject}.
  *
@@ -43,7 +42,7 @@ class CreateProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingFileArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -53,7 +52,7 @@ class CreateProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailToGetCrsfToken() {
     try {
       failCsrfRequest = true;
@@ -74,7 +73,7 @@ class CreateProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() {
     try {
       URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");

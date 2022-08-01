@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link ExtractOperations}.
  *
@@ -45,7 +44,7 @@ class ExtractOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingProjectArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -55,7 +54,7 @@ class ExtractOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailOnRefineRequestFailure() {
     try {
       shouldFailExportRequest = true;
@@ -72,7 +71,7 @@ class ExtractOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));

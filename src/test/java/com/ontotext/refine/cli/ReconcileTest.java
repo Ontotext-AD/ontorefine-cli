@@ -19,7 +19,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link Reconcile}.
  *
@@ -59,7 +58,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingProjectArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -69,7 +68,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingColumnArg() {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
@@ -79,7 +78,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingServiceArg() {
     try {
       commandExecutor().accept(args(PROJECT_ID, COLUMN, "-u " + responder.getUri()));
@@ -89,7 +88,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfullyAsyncExecution() {
     try {
       commandExecutor()
@@ -109,7 +108,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfullyButFailedToTrackProgress() {
     try {
       shouldReturnIrrelevantProcess = true;
@@ -131,7 +130,7 @@ class ReconcileTest extends BaseProcessTest {
    * Takes up to 2-3 seconds for execution as the functionality under testing has built-in timeout.
    */
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfullyWithProgress() {
     try {
       new Timer().schedule(changeFlag(), 1000); // simulates completion of the process after time
@@ -159,7 +158,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailToRetrieveColumnTypes() {
     try {
       shouldReturnEmptyColumnTypes = true;
@@ -174,7 +173,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailOnColumnTypesErrorResponse() {
     try {
       shouldReturnErrorForColumnTypes = true;
@@ -192,7 +191,7 @@ class ReconcileTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailOnReconcileErrorResponse() {
     try {
       shouldReturnErrorForReconcile = true;

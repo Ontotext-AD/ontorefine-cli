@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link RetrieveVersion}.
  *
@@ -44,7 +43,7 @@ class RetrieveVersionTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -57,7 +56,7 @@ class RetrieveVersionTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFail() {
     try {
       shouldFail = true;

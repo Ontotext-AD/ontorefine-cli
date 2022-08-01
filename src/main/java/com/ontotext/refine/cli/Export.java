@@ -1,8 +1,9 @@
 package com.ontotext.refine.cli;
 
 import com.ontotext.refine.client.RefineClient;
-import com.ontotext.refine.client.command.ExportRowsResponse;
 import com.ontotext.refine.client.command.RefineCommands;
+import com.ontotext.refine.client.command.export.Engines;
+import com.ontotext.refine.client.command.export.ExportRowsResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
@@ -10,7 +11,6 @@ import org.apache.commons.io.FileUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
-
 
 /**
  * Defines the export process for different formats and all of the required arguments for it.
@@ -47,11 +47,10 @@ class Export extends Process {
 
       ExportRowsResponse response = RefineCommands
           .exportRows()
-          .project(project)
-          .format(format)
-          // TODO not sure if there are more options for the engine
-          .engine("{\"mode\":\"row-based\"}")
-          .token(getToken())
+          .setProject(project)
+          .setFormat(format)
+          .setEngine(Engines.ROW_BASED)
+          .setToken(getToken())
           .build()
           .execute(client);
 

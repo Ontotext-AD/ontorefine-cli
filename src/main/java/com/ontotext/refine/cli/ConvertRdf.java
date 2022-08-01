@@ -18,7 +18,6 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines the convert RDF process and all of the required arguments for it.
  *

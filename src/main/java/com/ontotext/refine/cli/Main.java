@@ -3,15 +3,22 @@ package com.ontotext.refine.cli;
 import picocli.CommandLine;
 
 /**
- * The main entry-point for the ontorefine-cli command. The remaining commands
- * are defined as subcommands such that the whole appears as a single application.
- * The order of the commands is significant and represents the likely workflow,
- * grouped by functionality.
+ * The main entry-point for the ontorefine-cli command. The remaining commands are defined as
+ * sub-commands such that the whole appears as a single application. The order of the commands is
+ * significant and represents the likely workflow, grouped by functionality.
  */
 @CommandLine.Command(name = "ontorefine-cli",
-    subcommands = { CreateProject.class, DeleteProject.class, Export.class,
-        ExtractOperations.class, ApplyOperations.class, Reconcile.class, RegisterReconService.class,
-        ConvertRdf.class, RetrieveVersion.class, CommandLine.HelpCommand.class,},
+    subcommands = {
+        CreateProject.class,
+        DeleteProject.class,
+        Export.class,
+        ExtractOperations.class,
+        ApplyOperations.class,
+        Reconcile.class,
+        RegisterReconService.class,
+        ConvertRdf.class,
+        RetrieveVersion.class,
+        CommandLine.HelpCommand.class,},
     mixinStandardHelpOptions = true,
     separator = " ",
     versionProvider = VersionProvider.class)
@@ -19,9 +26,14 @@ class Main implements Runnable {
 
   @Override
   public void run() {
-    // won't be called, this command has subcommands
+    // won't be called, this command has sub-commands
   }
 
+  /**
+   * Executes the specified command.
+   *
+   * @param args for the command
+   */
   public static void main(String... args) {
     final CommandLine cmd = new CommandLine(new Main()).setCaseInsensitiveEnumValuesAllowed(true);
 

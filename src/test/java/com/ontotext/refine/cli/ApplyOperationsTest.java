@@ -17,7 +17,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link ApplyOperations}.
  *
@@ -47,7 +46,7 @@ class ApplyOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingOperationsArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -57,7 +56,7 @@ class ApplyOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingProjectArg() {
     try {
       commandExecutor().accept(args("operations.json", "-u " + responder.getUri()));
@@ -67,7 +66,7 @@ class ApplyOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() {
     try {
       URL resource = getClass().getClassLoader().getResource("operations.json");
@@ -88,7 +87,7 @@ class ApplyOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldReturnError() {
     try {
       shouldRespondWithError = true;
@@ -106,7 +105,7 @@ class ApplyOperationsTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailToGetCrsfToken() {
     try {
       shouldFailToGetCsrf = true;

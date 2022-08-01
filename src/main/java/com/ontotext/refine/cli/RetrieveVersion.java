@@ -7,7 +7,6 @@ import com.ontotext.refine.client.exceptions.RefineException;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Defines the version retrieval process.
  *

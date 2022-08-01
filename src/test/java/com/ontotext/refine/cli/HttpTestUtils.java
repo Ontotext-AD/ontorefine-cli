@@ -10,7 +10,6 @@ import org.apache.http.impl.bootstrap.HttpServer;
 import org.apache.http.impl.bootstrap.ServerBootstrap;
 import org.apache.http.protocol.HttpRequestHandler;
 
-
 /**
  * Utility class for common logic used in tests that require mocked HTTP server.
  *

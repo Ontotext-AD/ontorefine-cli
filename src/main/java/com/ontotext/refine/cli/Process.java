@@ -36,7 +36,7 @@ abstract class Process implements Callable<Integer> {
   protected RefineClient getClient() throws RefineException {
     if (client == null) {
       try {
-        client = RefineClients.create(url);
+        client = RefineClients.standard(url);
       } catch (Exception exc) {
         throw new RefineException("Failed to get client instance due to: " + exc.getMessage());
       }

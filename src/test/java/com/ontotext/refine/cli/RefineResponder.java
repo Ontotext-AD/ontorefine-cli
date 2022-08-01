@@ -10,7 +10,6 @@ import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.impl.bootstrap.HttpServer;
 import org.apache.http.protocol.HttpRequestHandler;
 
-
 /**
  * Responder which acts like Refine server and handles the responses for those request.
  *

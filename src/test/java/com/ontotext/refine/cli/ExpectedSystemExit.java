@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
 
-
 /**
  * Provides a way to assert the {@link System#exit(int)} code on tests which are verifying certain
  * system behavior.<br>
@@ -28,7 +27,7 @@ import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
  * <pre>
  * <code>
  * &#64;Test
- * &#64;ExpectSystemExit(1)
+ * &#64;ExpectedSystemExit(1)
  * void testMethod() {
  *   try {
  *     // code which invokes System.exit
@@ -43,8 +42,8 @@ import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
-@ExtendWith(ExpectSystemExit.SystemExitVerifier.class)
-public @interface ExpectSystemExit {
+@ExtendWith(ExpectedSystemExit.SystemExitVerifier.class)
+public @interface ExpectedSystemExit {
 
   /**
    * The expected code with which {@link System#exit(int)} should be invoked.
@@ -54,7 +53,7 @@ public @interface ExpectSystemExit {
   int value() default 0;
 
   /**
-   * {@link ExpectSystemExit} annotation processor which handles the tests that should check the
+   * {@link ExpectedSystemExit} annotation processor which handles the tests that should check the
    * {@link System#exit(int)} conditions.
    *
    * @author Antoniy Kunchev
@@ -73,13 +72,9 @@ public @interface ExpectSystemExit {
       System.setSecurityManager(proxy);
     }
 
-    private Optional<ExpectSystemExit> getAnnotation(ExtensionContext context) {
-      Optional<ExpectSystemExit> opt = findAnnotation(context.getTestMethod(),
-          ExpectSystemExit.class);
-      if (!opt.isPresent()) {
-        opt = findAnnotation(context.getTestClass(), ExpectSystemExit.class);
-      }
-      return opt;
+    private Optional<ExpectedSystemExit> getAnnotation(ExtensionContext context) {
+      return findAnnotation(context.getTestMethod(), ExpectedSystemExit.class)
+          .or(() -> findAnnotation(context.getTestClass(), ExpectedSystemExit.class));
     }
 
     @Override

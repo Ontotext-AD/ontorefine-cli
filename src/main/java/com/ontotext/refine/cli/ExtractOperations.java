@@ -8,7 +8,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines the extract operations process and all of the required arguments for it.
  *

@@ -21,7 +21,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link ConvertRdf}.
  *
@@ -51,7 +50,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingProjectArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -61,7 +60,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailDuringModelsExtraction() {
     try {
       shouldFailModelsExtraction = true;
@@ -80,7 +79,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailDuringMappingFileReading() {
     try {
       // passing directory as file to cause FileNotFoundException
@@ -100,7 +99,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailDuringModelsExtraction_missingOverlayModels() {
     try {
       shouldNotContainOverlayModels = true;
@@ -116,7 +115,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailDuringModelsExtraction_missingMappingDefinition() {
     try {
       shouldNotContainMappingDef = true;
@@ -132,7 +131,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() throws IOException {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
@@ -145,7 +144,7 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfullyProvidedMapping() throws IOException {
     try {
       URL resource = getClass().getClassLoader().getResource("rdf-mapping.json");
@@ -199,6 +198,7 @@ class ConvertRdfTest extends BaseProcessTest {
       response.setStatusCode(HttpStatus.SC_OK);
       BasicHttpEntity entity = new BasicHttpEntity();
       entity.setContent(loadResource("exportedRdf.ttl"));
+      entity.setContentLength(69);
       response.setEntity(entity);
     };
   }

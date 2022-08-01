@@ -10,7 +10,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines a registration of additional reconciliation service process and all of the required
  * arguments for it.

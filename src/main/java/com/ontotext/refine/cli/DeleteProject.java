@@ -9,7 +9,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines the delete project process and all of the required arguments for it.
  *

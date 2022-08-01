@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link Export}.
  *
@@ -44,7 +43,7 @@ class ExportTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingProjectArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -54,7 +53,7 @@ class ExportTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingFormatArg() {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
@@ -64,7 +63,7 @@ class ExportTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnInvalidFormatArg() {
     try {
       commandExecutor().accept(args(PROJECT_ID, "xml", "-u " + responder.getUri()));
@@ -76,7 +75,7 @@ class ExportTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailDuringOperationsExtraction() {
     try {
       shouldFailOperationsExtraction = true;
@@ -94,7 +93,7 @@ class ExportTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() throws IOException {
     try {
       commandExecutor().accept(args(PROJECT_ID, "csv", "-u " + responder.getUri()));

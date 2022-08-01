@@ -16,7 +16,6 @@ import org.junit.jupiter.api.Test;
 import picocli.CommandLine;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Provides common logic that could be used throughout the CLI tests.
  *
@@ -37,13 +36,13 @@ abstract class BaseProcessTest {
 
   protected final Consumer<String[]> commandExecutor() {
     return cmdArgs -> {
-      List<String> args = new ArrayList<>();
+      List<String> args = new ArrayList<>(cmdArgs.length + 1);
       Class<?> commandClass = command();
       if (commandClass != null) {
         args.add(commandClass.getAnnotation(CommandLine.Command.class).name());
       }
       args.addAll(Arrays.asList(cmdArgs));
-      Main.main(args.toArray(new String[0]));
+      Main.main(args.toArray(String[]::new));
     };
   }
 
@@ -71,7 +70,7 @@ abstract class BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   protected void shouldFailOnMissingRefineUrl() {
     try {
       commandExecutor().accept(new String[0]);

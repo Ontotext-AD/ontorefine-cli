@@ -3,7 +3,7 @@
 
     <groupId>com.ontotext</groupId>
     <artifactId>ontorefine-cli</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A command-line interface for execution of operations in OntoRefine tool</description>
@@ -57,8 +57,8 @@
     </repositories>
 
     <properties>
-        <java.version>8</java.version>
-        <project.java.version>8</project.java.version>
+        <java.version>11</java.version>
+        <project.java.version>11</project.java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <cvss.threshold>6.9</cvss.threshold>
@@ -69,21 +69,21 @@
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <sonar.coverage.jacoco.xmlReportPaths>../ontorefine-cli/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 
-        <maven.compiler.plugin.version>3.8.1</maven.compiler.plugin.version>
-        <maven.resources.plugin.version>3.2.0</maven.resources.plugin.version>
+        <maven.compiler.plugin.version>3.10.1</maven.compiler.plugin.version>
+        <maven.resources.plugin.version>3.3.0</maven.resources.plugin.version>
         <maven.checkstyle.plugin.version>3.1.2</maven.checkstyle.plugin.version>
-        <maven.surefire.plugin.version>3.0.0-M5</maven.surefire.plugin.version>
-        <maven.release.plugin.version>3.0.0-M4</maven.release.plugin.version>
-        <dependency.check.plugin.version>6.2.2</dependency.check.plugin.version>
-        <jacoco.version>0.8.7</jacoco.version>
+        <maven.surefire.plugin.version>3.0.0-M7</maven.surefire.plugin.version>
+        <maven.release.plugin.version>3.0.0-M6</maven.release.plugin.version>
+        <dependency.check.plugin.version>7.1.1</dependency.check.plugin.version>
+        <jacoco.version>0.8.8</jacoco.version>
 
-        <ontorefine.client.version>1.1.0</ontorefine.client.version>
-        <picocli.version>4.6.1</picocli.version>
+        <ontorefine.client.version>1.6.3</ontorefine.client.version>
+        <picocli.version>4.6.3</picocli.version>
 
         <slf4j.version>1.7.32</slf4j.version>
         <jackson.version>2.13.2.1</jackson.version>
-        <junit.jupiter.version>5.7.1</junit.jupiter.version>
-        <mockito.version>3.8.0</mockito.version>
+        <junit.jupiter.version>5.9.0</junit.jupiter.version>
+        <mockito.version>4.6.1</mockito.version>
 
         <checkstyle.enabled>true</checkstyle.enabled>
 
@@ -93,7 +93,7 @@
 
     <profiles>
         <profile>
-            <id>develop</id>
+            <id>dev</id>
             <properties>
                 <checkstyle.enabled>false</checkstyle.enabled>
             </properties>

@@ -10,6 +10,7 @@ import picocli.CommandLine;
  * Created by Pavel Mihaylov on 21/09/2021.
  */
 class MainTest extends BaseProcessTest {
+
   @Override
   protected Class<?> command() {
     return null;
@@ -21,7 +22,7 @@ class MainTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(CommandLine.ExitCode.USAGE)
+  @ExpectedSystemExit(CommandLine.ExitCode.USAGE)
   void shouldShowMissingCommandUsage() {
     try {
       commandExecutor().accept(args());
@@ -34,7 +35,7 @@ class MainTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(CommandLine.ExitCode.OK)
+  @ExpectedSystemExit(CommandLine.ExitCode.OK)
   void shouldShowUsageOnHyphenH() {
     try {
       commandExecutor().accept(args("-h"));
@@ -47,7 +48,7 @@ class MainTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(CommandLine.ExitCode.OK)
+  @ExpectedSystemExit(CommandLine.ExitCode.OK)
   void shouldShowUsageOnHelp() {
     try {
       commandExecutor().accept(args("-h"));

@@ -12,7 +12,6 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines the create project process and all of the required arguments for it.
  *
@@ -38,15 +37,21 @@ class CreateProject extends Process {
           + " the file name will be used.")
   private String name;
 
+  // TODO this should be more human friendly
   @Option(
       names = {"-f", "--format"},
       description = "The format of the provided file.",
       defaultValue = "text/line-based/*sv")
   private String format;
 
+  // TODO we need additional argument for the options for the project
+  // the options are metadata for the project and the file. For some files it is required to provide
+  // an initial parsing point to the refine tool. Example JSON, XML, etc.
+
   @Override
   public Integer call() throws Exception {
     try (RefineClient client = getClient()) {
+
       CreateProjectResponse response = RefineCommands
           .createProject()
           .file(file)

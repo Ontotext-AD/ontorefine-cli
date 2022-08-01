@@ -16,7 +16,6 @@ import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines a reconciliation process and all of the required arguments for it.
  *

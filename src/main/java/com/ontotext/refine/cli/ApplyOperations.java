@@ -14,7 +14,6 @@ import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
 
-
 /**
  * Defines a apply operations process and all of the required arguments for it.
  *

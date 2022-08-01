@@ -16,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
-
 /**
  * Test for {@link DeleteProject}.
  *
@@ -46,7 +45,7 @@ class DeleteProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingFileArg() {
     try {
       commandExecutor().accept(args("-u " + responder.getUri()));
@@ -56,7 +55,7 @@ class DeleteProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldFailToGetCrsfToken() {
     try {
       failCsrfRequest = true;
@@ -74,7 +73,7 @@ class DeleteProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.SOFTWARE)
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
   void shouldReturnError() {
     try {
       shouldRespondWithError = true;
@@ -90,7 +89,7 @@ class DeleteProjectTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectSystemExit(ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully() {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));

@@ -14,6 +14,8 @@
    vulnerabilities. This will be done on regular bases in the future.
  - The version of the `ontorefine-client` library was updated to the latest in order to use the new functionalities that are developed there and to remove some
    bugs from the version `1.1.0` that was previously used.
+ - Updated the CI scripts to the latest versions of the GitHub actions. Also we moved from `adopt` to `temurin` Java, because the internally in the organization
+   we are moving to `temurin`.
 
 ### Bug fixes
 

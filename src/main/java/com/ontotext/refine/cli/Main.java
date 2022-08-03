@@ -7,7 +7,8 @@ import picocli.CommandLine;
  * sub-commands such that the whole appears as a single application. The order of the commands is
  * significant and represents the likely workflow, grouped by functionality.
  */
-@CommandLine.Command(name = "ontorefine-cli",
+@CommandLine.Command(
+    name = "ontorefine-cli",
     subcommands = {
         CreateProject.class,
         DeleteProject.class,

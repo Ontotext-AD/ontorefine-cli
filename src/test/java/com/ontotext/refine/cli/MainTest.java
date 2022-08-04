@@ -3,8 +3,9 @@ package com.ontotext.refine.cli;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import org.junit.jupiter.api.Test;
-import picocli.CommandLine;
+import picocli.CommandLine.ExitCode;
 
 /**
  * Created by Pavel Mihaylov on 21/09/2021.
@@ -17,12 +18,12 @@ class MainTest extends BaseProcessTest {
   }
 
   @Override
-  // Test not applicable to main command
   protected void shouldFailOnMissingRefineUrl() {
+    // not applicable to main command
   }
 
   @Test
-  @ExpectedSystemExit(CommandLine.ExitCode.USAGE)
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldShowMissingCommandUsage() {
     try {
       commandExecutor().accept(args());
@@ -35,7 +36,7 @@ class MainTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectedSystemExit(CommandLine.ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldShowUsageOnHyphenH() {
     try {
       commandExecutor().accept(args("-h"));
@@ -48,7 +49,7 @@ class MainTest extends BaseProcessTest {
   }
 
   @Test
-  @ExpectedSystemExit(CommandLine.ExitCode.OK)
+  @ExpectedSystemExit(ExitCode.OK)
   void shouldShowUsageOnHelp() {
     try {
       commandExecutor().accept(args("-h"));

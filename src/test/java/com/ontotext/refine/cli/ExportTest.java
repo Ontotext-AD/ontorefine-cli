@@ -3,7 +3,9 @@ package com.ontotext.refine.cli;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.ontotext.refine.cli.RefineResponder.HandlerContext;
+import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
+import com.ontotext.refine.cli.test.support.RefineResponder;
+import com.ontotext.refine.cli.test.support.RefineResponder.HandlerContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;
@@ -106,10 +108,11 @@ class ExportTest extends BaseProcessTest {
   }
 
   private static Map<String, HttpRequestHandler> mockResponses() {
-    Map<String, HttpRequestHandler> responses = new HashMap<>();
+    Map<String, HttpRequestHandler> responses = new HashMap<>(3);
     HandlerContext context = new HandlerContext();
     responses.put("/orefine/command/core/get-csrf-token", RefineResponder.csrfToken(context));
     responses.put("/orefine/command/core/export-rows", exportHandler());
+    responses.put("/orefine/command/core/get-processes", RefineResponder.noProcesses());
     return responses;
   }
 

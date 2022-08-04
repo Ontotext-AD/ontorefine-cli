@@ -15,4 +15,5 @@ A command-line interface for execution of operations in OntoRefine
     apply             Applies transformation operations to a project.
     register-service  Registers an additional reconciliation service.
     rdf               Converts the data of a project to RDF format.
-    help              Displays help information about the specified command
+    transform         Transforms given dataset into different data format.
+    help              Displays help information about the specified command.

@@ -8,21 +8,20 @@ import com.ontotext.refine.client.exceptions.RefineException;
 import java.util.concurrent.Callable;
 import picocli.CommandLine.Option;
 
-
 /**
  * Base abstraction for all CLI processes. It defines common arguments for all processes and
  * provides some convenient methods used in the processes.
  *
  * @author Antoniy Kunchev
  */
-abstract class Process implements Callable<Integer> {
+public abstract class Process implements Callable<Integer> {
 
   // cached instance to avoid re-initialization, when there are multiple request within one process
   private RefineClient client;
 
   @Option(
       names = {"-u", "--url"},
-      description = "The URL of the GraphDB instance whose OntoRefine to connect to, e.g. http://localhost:7200.",
+      description = "The URL of the Ontotext Refine instance to connect to, e.g. http://localhost:7333.",
       required = true)
   private String url;
 

@@ -1,5 +1,6 @@
 package com.ontotext.refine.cli;
 
+import com.ontotext.refine.cli.utils.ExportUtils;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.export.Engines;
@@ -44,6 +45,7 @@ class Export extends Process {
 
     File result = null;
     try (RefineClient client = getClient()) {
+      ExportUtils.awaitProcessesCompletion(project, client);
 
       ExportRowsResponse response = RefineCommands
           .exportRows()

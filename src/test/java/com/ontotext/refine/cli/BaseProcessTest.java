@@ -2,6 +2,7 @@ package com.ontotext.refine.cli;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
@@ -21,7 +22,7 @@ import picocli.CommandLine.ExitCode;
  *
  * @author Antoniy Kunchev
  */
-abstract class BaseProcessTest {
+public abstract class BaseProcessTest {
 
   private ByteArrayOutputStream outputOs;
   private String consoleOutputAsStr;

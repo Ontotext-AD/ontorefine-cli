@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
+import com.ontotext.refine.cli.test.support.RefineResponder;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;

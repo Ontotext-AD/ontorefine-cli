@@ -1,14 +1,12 @@
-package com.ontotext.refine.cli;
+package com.ontotext.refine.cli.create;
 
+import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.RefineClient;
-import com.ontotext.refine.client.UploadFormat;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.create.CreateProjectResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
-import java.util.Arrays;
-import java.util.Iterator;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
@@ -24,7 +22,7 @@ import picocli.CommandLine.Parameters;
     name = "create",
     description = "Creates a new project from a file.",
     separator = " ")
-class CreateProject extends Process {
+public class CreateProject extends Process {
 
   @Parameters(
       index = "0",
@@ -77,42 +75,5 @@ class CreateProject extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
-  }
-
-  /**
-   * Provides human friendly representation of the values for the input data formats.
-   *
-   * @author Antoniy Kunchev
-   */
-  private enum InputDataFormat {
-
-    CSV(UploadFormat.SEPARATOR_BASED);
-
-    // TODO: more for the next releases
-
-    private final UploadFormat uploadFormat;
-
-    private InputDataFormat(UploadFormat uploadFormat) {
-      this.uploadFormat = uploadFormat;
-    }
-
-    private UploadFormat toUploadFormat() {
-      return uploadFormat;
-    }
-  }
-
-  /**
-   * Provides the allowed input data formats and completion candidates for the format argument.
-   *
-   * @author Antoniy Kunchev
-   */
-  private static class AllowedInputDataFormats implements Iterable<String> {
-
-    @Override
-    public Iterator<String> iterator() {
-      return Arrays.stream(InputDataFormat.values())
-          .map(value -> value.toString().toLowerCase())
-          .iterator();
-    }
   }
 }

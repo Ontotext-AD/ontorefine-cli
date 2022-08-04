@@ -1,4 +1,4 @@
-package com.ontotext.refine.cli;
+package com.ontotext.refine.cli.test.support;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.platform.commons.util.AnnotationUtils.findAnnotation;
@@ -90,8 +90,8 @@ public @interface ExpectedSystemExit {
     @Override
     public void afterEach(final ExtensionContext context) {
       System.setSecurityManager(systemSecurityManager);
-      assertEquals(
-          expected, proxy.code, "Expected System.exit(" + expected + ") but it was never invoked.");
+      assertEquals(expected, proxy.code,
+          "Expected System.exit(" + expected + ") but it was never invoked.");
     }
   }
 

@@ -6,7 +6,7 @@
     <version>1.1-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
-    <description>A command-line interface for execution of operations in OntoRefine tool</description>
+    <description>A command-line interface for execution of operations in Ontotext Refine</description>
     <url>https://github.com/Ontotext-AD/ontorefine-cli</url>
 
     <licenses>
@@ -19,6 +19,7 @@
     <developers>
         <developer>
             <name>The Ontotext Team</name>
+            <email>refine-support@ontotext.com</email>
             <organization>Ontotext-AD</organization>
             <organizationUrl>https://github.com/Ontotext-AD</organizationUrl>
         </developer>
@@ -36,8 +37,8 @@
         <connection>scm:git:git@github.com:Ontotext-AD/ontorefine-cli.git</connection>
         <developerConnection>scm:git:git@github.com:Ontotext-AD/ontorefine-cli.git</developerConnection>
         <url>https://github.com/Ontotext-AD/ontorefine-cli</url>
-      <tag>HEAD</tag>
-  </scm>
+        <tag>HEAD</tag>
+    </scm>
 
     <!-- 'all-onto' is the repository from where the 'ontorefine-client' will be download -->
     <repositories>
@@ -85,7 +86,7 @@
         <dependency.check.plugin.version>7.1.1</dependency.check.plugin.version>
         <jacoco.version>0.8.8</jacoco.version>
 
-        <ontorefine.client.version>1.6.3</ontorefine.client.version>
+        <ontorefine.client.version>1.7.0-SNAPSHOT</ontorefine.client.version>
         <picocli.version>4.6.3</picocli.version>
 
         <slf4j.version>1.7.32</slf4j.version>
@@ -94,6 +95,7 @@
         <mockito.version>4.6.1</mockito.version>
 
         <checkstyle.enabled>true</checkstyle.enabled>
+        <skip.dependency.check>false</skip.dependency.check>
     </properties>
 
     <profiles>
@@ -101,6 +103,13 @@
             <id>dev</id>
             <properties>
                 <checkstyle.enabled>false</checkstyle.enabled>
+            </properties>
+        </profile>
+        <profile>
+            <id>local</id>
+            <properties>
+                <checkstyle.enabled>false</checkstyle.enabled>
+                <skip.dependency.check>true</skip.dependency.check>
             </properties>
         </profile>
     </profiles>
@@ -239,6 +248,7 @@
                 <artifactId>dependency-check-maven</artifactId>
                 <version>${dependency.check.plugin.version}</version>
                 <configuration>
+                    <skip>${skip.dependency.check}</skip>
                     <failBuildOnCVSS>${cvss.threshold}</failBuildOnCVSS>
                 </configuration>
                 <executions>

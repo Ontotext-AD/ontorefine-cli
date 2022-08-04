@@ -1,4 +1,4 @@
-package com.ontotext.refine.cli;
+package com.ontotext.refine.cli.test.support;
 
 import java.net.InetSocketAddress;
 import java.net.URI;

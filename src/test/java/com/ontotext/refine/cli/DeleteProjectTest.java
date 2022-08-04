@@ -3,7 +3,9 @@ package com.ontotext.refine.cli;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.ontotext.refine.cli.RefineResponder.HandlerContext;
+import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
+import com.ontotext.refine.cli.test.support.RefineResponder;
+import com.ontotext.refine.cli.test.support.RefineResponder.HandlerContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.HashMap;

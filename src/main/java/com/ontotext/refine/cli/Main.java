@@ -1,5 +1,8 @@
 package com.ontotext.refine.cli;
 
+import com.ontotext.refine.cli.create.CreateProject;
+import com.ontotext.refine.cli.export.rdf.ExportRdf;
+import com.ontotext.refine.cli.transform.Transform;
 import picocli.CommandLine;
 
 /**
@@ -16,9 +19,10 @@ import picocli.CommandLine;
         ExtractOperations.class,
         ApplyOperations.class,
         RegisterReconService.class,
-        ConvertRdf.class,
+        ExportRdf.class,
+        Transform.class,
         RetrieveVersion.class,
-        CommandLine.HelpCommand.class,},
+        CommandLine.HelpCommand.class},
     mixinStandardHelpOptions = true,
     separator = " ",
     versionProvider = VersionProvider.class)

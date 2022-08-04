@@ -1,10 +1,13 @@
-package com.ontotext.refine.cli;
+package com.ontotext.refine.cli.export.rdf;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.ontotext.refine.cli.BaseProcessTest;
+import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
+import com.ontotext.refine.cli.test.support.RefineResponder;
 import com.ontotext.refine.client.util.JsonParser;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -22,11 +25,11 @@ import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
 /**
- * Test for {@link ConvertRdf}.
+ * Test for {@link ExportRdf}.
  *
  * @author Antoniy Kunchev
  */
-class ConvertRdfTest extends BaseProcessTest {
+class ExportRdfTest extends BaseProcessTest {
 
   private static RefineResponder responder = new RefineResponder();
   private static boolean shouldFailModelsExtraction;
@@ -46,7 +49,7 @@ class ConvertRdfTest extends BaseProcessTest {
 
   @Override
   protected Class<?> command() {
-    return ConvertRdf.class;
+    return ExportRdf.class;
   }
 
   @Test
@@ -93,40 +96,8 @@ class ConvertRdfTest extends BaseProcessTest {
       String[] errorsArray = consoleErrors().split(System.lineSeparator());
       String lastLine = errorsArray[errorsArray.length - 1];
       assertEquals(
-          "Failed to read the mapping from the file: 'test-classes' for project: '1812661014997'",
+          "Failed to read the mapping from file: 'test-classes'.",
           lastLine.trim());
-    }
-  }
-
-  @Test
-  @ExpectedSystemExit(ExitCode.SOFTWARE)
-  void shouldFailDuringModelsExtraction_missingOverlayModels() {
-    try {
-      shouldNotContainOverlayModels = true;
-
-      commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
-    } finally {
-      shouldNotContainOverlayModels = false;
-
-      String[] errorsArray = consoleErrors().split(System.lineSeparator());
-      String lastLine = errorsArray[errorsArray.length - 1];
-      assertEquals("Failed to retrieve the mapping for project: '1812661014997'", lastLine.trim());
-    }
-  }
-
-  @Test
-  @ExpectedSystemExit(ExitCode.SOFTWARE)
-  void shouldFailDuringModelsExtraction_missingMappingDefinition() {
-    try {
-      shouldNotContainMappingDef = true;
-
-      commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
-    } finally {
-      shouldNotContainMappingDef = false;
-
-      String[] errorsArray = consoleErrors().split(System.lineSeparator());
-      String lastLine = errorsArray[errorsArray.length - 1];
-      assertEquals("Failed to retrieve the mapping for project: '1812661014997'", lastLine.trim());
     }
   }
 
@@ -162,9 +133,10 @@ class ConvertRdfTest extends BaseProcessTest {
   }
 
   private static Map<String, HttpRequestHandler> mockResponses() {
-    Map<String, HttpRequestHandler> handlers = new HashMap<>();
+    Map<String, HttpRequestHandler> handlers = new HashMap<>(3);
     handlers.put("/orefine/command/core/get-models", getModels());
-    handlers.put("/rest/rdf-mapper/rdf/ontorefine:" + PROJECT_ID, exportHandler());
+    handlers.put("/rest/rdf-mapper/rdf/ontorefine:" + PROJECT_ID, RefineResponder.exportHandler());
+    handlers.put("/orefine/command/core/get-processes", RefineResponder.noProcesses());
     return handlers;
   }
 
@@ -193,17 +165,7 @@ class ConvertRdfTest extends BaseProcessTest {
     };
   }
 
-  private static HttpRequestHandler exportHandler() {
-    return (request, response, context) -> {
-      response.setStatusCode(HttpStatus.SC_OK);
-      BasicHttpEntity entity = new BasicHttpEntity();
-      entity.setContent(loadResource("exportedRdf.ttl"));
-      entity.setContentLength(69);
-      response.setEntity(entity);
-    };
-  }
-
   private static InputStream loadResource(String resource) {
-    return ConvertRdfTest.class.getClassLoader().getResourceAsStream(resource);
+    return ExportRdfTest.class.getClassLoader().getResourceAsStream(resource);
   }
 }

@@ -1,0 +1,8 @@
+BASE <http://example.com/base/>
+
+CONSTRUCT {
+    ?subject <title> ?o_title .
+} WHERE {
+    BIND(<subject> as ?subject)
+    BIND(STR(?c_Title) as ?o_title)
+}

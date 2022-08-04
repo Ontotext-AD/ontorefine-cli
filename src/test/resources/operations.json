@@ -1,5 +1,5 @@
 {
-  "entities": [
+  "entries": [
     {
       "operation": {
         "op": "mapping-editor/save-rdf-mapping",

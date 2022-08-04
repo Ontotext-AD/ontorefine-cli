@@ -6,6 +6,9 @@
 
  - Introduced new GitHub Workflow for project release. The workflow builds packages and deploys them in the Ontotext Public Maven Repository. The workflow is
    triggered when new release is created though the GitHub release page.
+ - Introduced new command for transformation of specific dataset to different format. In this version the command will support only transformation of CSV to RDF.
+   The goal for future releases is to gradually add more types of transformations like JSON to CSV, XML to TSV, etc. Basically the only limitations are going to be
+   releated to what Ontotext Refine can accept as input for the project data and in what format can that data be exported afterwards.
  
 ### Breaking Changes
 
@@ -26,12 +29,21 @@
    bugs from the version `1.1.0` that was previously used.
  - Updated the CI scripts to the latest versions of the GitHub actions. Also we moved from `adopt` to `temurin` Java, because of the
    [AdoptOpenJDK transition to the Eclipse Foundation](https://blog.adoptopenjdk.net/2021/03/transition-to-eclipse-an-update/).
+ - Changed the behavior of the export commands. Now they will wait for any running background processes over the project to complete, before proceeding with the data
+   export. This was done mainly, because the reconciliation operation is slow and the performance depend on a lot of things. Furthermore, when the dataset is large
+   it may take several minutes, even hours. So in order to guarantee that the export will be done over the updated data, the operations should be delayed.
+ - Renamed some of the commands classes.
+ - Separated some of the commands in their own packages in order to keep the related logic grouped.
+ - Exposed some of the internal classes and enumerations in order to reuse them in the composition commands like the new `transform`.
+ - A lot of common logic that was extracted in utility class so that it can be reused in more commands and processes.
 
 ### Bug fixes
 
  - Fixed an issue, where if the user passes `null` or nonexistent file for the command arguments, the values will be accepted and the commands will proceed with
    the execution. This behavior caused some unexpected errors in particular for the creation of the project command. Now the file parameters for the commands are
    validated, before the execution of the commands logic.
+ - Fixed the issue with the RDF export command, where if the user provides JSON document as mapping retrieved from the RDF Mapper UI, instead of the operations tab
+   in the OpenRefine UI, the command fails with error. Related issue: #8.
 
 
 ## Version 1.0

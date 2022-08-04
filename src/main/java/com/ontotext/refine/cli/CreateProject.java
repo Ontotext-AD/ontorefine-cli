@@ -6,6 +6,8 @@ import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.create.CreateProjectResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
+import java.util.Arrays;
+import java.util.Iterator;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
@@ -28,7 +30,7 @@ class CreateProject extends Process {
       paramLabel = "FILE",
       description = "The file that will be used to create the project."
           + " It should be a full name with one of the supported extensions"
-          + " (csv, tsv, xml, json, txt, xls, xlsx, ods).")
+          + " (csv).") // tsv, xml, json, txt, xls, xlsx, ods
   private File file;
 
   @Option(
@@ -37,12 +39,13 @@ class CreateProject extends Process {
           + " the file name will be used.")
   private String name;
 
-  // TODO this should be more human friendly
   @Option(
       names = {"-f", "--format"},
-      description = "The format of the provided file.",
-      defaultValue = "text/line-based/*sv")
-  private String format;
+      description = "The format of the provided file. The default format is '${DEFAULT-VALUE}'."
+          + " The allowed values are: ${COMPLETION-CANDIDATES}",
+      completionCandidates = AllowedInputDataFormats.class,
+      defaultValue = "csv")
+  private InputDataFormat format;
 
   // TODO we need additional argument for the options for the project
   // the options are metadata for the project and the file. For some files it is required to provide
@@ -55,7 +58,7 @@ class CreateProject extends Process {
       CreateProjectResponse response = RefineCommands
           .createProject()
           .file(file)
-          .format(UploadFormat.resolve(format))
+          .format(format.toUploadFormat())
           .name(StringUtils.defaultIfBlank(name, file.getName()))
           .token(getToken())
           .build()
@@ -69,5 +72,42 @@ class CreateProject extends Process {
       System.err.println(re.getMessage());
     }
     return ExitCode.SOFTWARE;
+  }
+
+  /**
+   * Provides human friendly representation of the values for the input data formats.
+   *
+   * @author Antoniy Kunchev
+   */
+  private enum InputDataFormat {
+
+    CSV(UploadFormat.SEPARATOR_BASED);
+
+    // TODO: more for the next releases
+
+    private final UploadFormat uploadFormat;
+
+    private InputDataFormat(UploadFormat uploadFormat) {
+      this.uploadFormat = uploadFormat;
+    }
+
+    private UploadFormat toUploadFormat() {
+      return uploadFormat;
+    }
+  }
+
+  /**
+   * Provides the allowed input data formats and completion candidates for the format argument.
+   *
+   * @author Antoniy Kunchev
+   */
+  private static class AllowedInputDataFormats implements Iterable<String> {
+
+    @Override
+    public Iterator<String> iterator() {
+      return Arrays.stream(InputDataFormat.values())
+          .map(value -> value.toString().toLowerCase())
+          .iterator();
+    }
   }
 }

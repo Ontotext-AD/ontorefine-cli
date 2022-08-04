@@ -5,6 +5,13 @@
 ### New
 
  - TBD
+ 
+### Breaking Changes
+
+ - The values for the `format` argument of the create project command are changed to be more user friendly. Now the user can simply pass `csv` as a value, instead
+   of `"text/line-based/*sv"`.
+ - For this version of the CLI, the create project command will work and accept only `.csv` files and data format. The other types of files and formats will be
+   gradually over the next few releases.
 
 ### Changes
 

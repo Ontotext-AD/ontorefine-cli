@@ -1,5 +1,8 @@
 package com.ontotext.refine.cli;
 
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
+import static com.ontotext.refine.cli.utils.PrintUtils.info;
+
 import com.ontotext.refine.cli.utils.ExportUtils;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
@@ -33,13 +36,14 @@ class Export extends Process {
   @Parameters(
       index = "1",
       paramLabel = "FORMAT",
-      description = "The output format of the export (csv or json).")
+      description = "The output format of the export (only csv at the moment).",
+      defaultValue = "csv")
   private String format;
 
   @Override
   public Integer call() throws Exception {
-    if (!isFormatSupported()) {
-      System.err.println(String.format("The format: '%s' is currently not supported.", format));
+    if (!"csv".equalsIgnoreCase(format)) {
+      error("The format: '%s' is currently not supported.", format);
       return ExitCode.USAGE;
     }
 
@@ -58,17 +62,13 @@ class Export extends Process {
 
       result = response.getFile();
 
-      System.out.println(FileUtils.readFileToString(result, StandardCharsets.UTF_8));
+      info(FileUtils.readFileToString(result, StandardCharsets.UTF_8));
       return ExitCode.OK;
     } catch (RefineException re) {
-      System.err.println(re.getMessage());
+      error(re.getMessage());
     } finally {
       FileUtils.deleteQuietly(result);
     }
     return ExitCode.SOFTWARE;
-  }
-
-  private boolean isFormatSupported() {
-    return "csv".equalsIgnoreCase(format) || "json".equalsIgnoreCase(format);
   }
 }

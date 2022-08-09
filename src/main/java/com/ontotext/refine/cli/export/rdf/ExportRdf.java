@@ -1,9 +1,11 @@
 package com.ontotext.refine.cli.export.rdf;
 
+import static com.ontotext.refine.cli.utils.ExportUtils.awaitProcessesCompletion;
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
+import static com.ontotext.refine.cli.utils.PrintUtils.print;
+import static com.ontotext.refine.cli.utils.RdfExportUtils.export;
+
 import com.ontotext.refine.cli.Process;
-import com.ontotext.refine.cli.utils.ExportUtils;
-import com.ontotext.refine.cli.utils.PrintUtils;
-import com.ontotext.refine.cli.utils.RdfExportUtils;
 import com.ontotext.refine.cli.utils.RdfExportUtils.Using;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.rdf.ResultFormat;
@@ -32,6 +34,12 @@ public class ExportRdf extends Process {
   private String project;
 
   @Option(
+      names = {"-q", "--sparql"},
+      description = "A file containing SPARQL CONSTRUCT query to be used for RDFization of the"
+          + " provided dataset.")
+  private File sparql;
+
+  @Option(
       names = {"-m", "--mapping"},
       description = "The mapping that will be used for the RDF conversion. The file should contain"
           + " JSON configuration. If not provided the process will try to retrieve it from the"
@@ -52,17 +60,22 @@ public class ExportRdf extends Process {
 
       // wait for any unfinished process
       // TODO: flag this to give the user option to skip it
-      ExportUtils.awaitProcessesCompletion(project, client);
+      awaitProcessesCompletion(project, client);
 
-      PrintUtils.print(RdfExportUtils.export(project, mapping, format, Using.MAPPING, client));
+      if (sparql != null) {
+        print(export(project, sparql, format, Using.SPARQL, client));
+      } else {
+        print(export(project, mapping, format, Using.MAPPING, client));
+      }
+
       return ExitCode.OK;
     } catch (RefineException re) {
-      System.err.println(re.getMessage());
+      error(re.getMessage());
     } catch (Exception exc) {
-      String error = String.format(
-          "Failed to execute RDF conversion for project: '%s' due to %s", project,
+      error(
+          "Failed to execute RDF conversion for project: '%s' due to %s",
+          project,
           exc.getMessage());
-      System.err.println(error);
     }
     return ExitCode.SOFTWARE;
   }

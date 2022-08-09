@@ -13,7 +13,6 @@ A command-line interface for execution of operations in OntoRefine
     export            Exports the data of a project in CSV or JSON format.
     extract           Extracts the operations of a project in JSON format.
     apply             Applies transformation operations to a project.
-    reconcile         Performs reconciliation over the project data.
     register-service  Registers an additional reconciliation service.
     rdf               Converts the data of a project to RDF format.
     help              Displays help information about the specified command

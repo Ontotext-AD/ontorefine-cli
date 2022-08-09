@@ -15,7 +15,6 @@ import picocli.CommandLine;
         Export.class,
         ExtractOperations.class,
         ApplyOperations.class,
-        Reconcile.class,
         RegisterReconService.class,
         ConvertRdf.class,
         RetrieveVersion.class,

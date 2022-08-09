@@ -9,6 +9,8 @@
  - Introduced new command for transformation of specific dataset to different format. In this version the command will support only transformation of CSV to RDF.
    The goal for future releases is to gradually add more types of transformations like JSON to CSV, XML to TSV, etc. Basically the only limitations are going to be
    related, to what Ontotext Refine can accept as input for the project data and in what format can that data be exported afterwards.
+ - Enhanced the `rdf` command to accept parameter for SPARQL query. The query is used for the mapping of the project data to RDF and it takes precedence, when there
+   is a mapping and a query provided.
  
 ### Breaking Changes
 
@@ -37,6 +39,7 @@
  - Exposed some of the internal classes and enumerations in order to reuse them in the composition commands like the new `transform`.
  - A lot of common logic that was extracted in utility class so that it can be reused in more commands and processes.
  - Removed couple of values from the allowed RDF result formats, because they are not supported in the Ontotext Refine at the moment.
+ - Removed the `JSON` option from the `export` command. Currently the command will support only export in default `CSV` format.
 
 ### Bug fixes
 

@@ -15,6 +15,7 @@ import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
@@ -56,6 +57,8 @@ class ExportTest extends BaseProcessTest {
 
   @Test
   @ExpectedSystemExit(ExitCode.USAGE)
+  @Disabled("We removed the multiple options ATM and there is default value."
+      + " This will be changed in future versions")
   void shouldExitWithErrorOnMissingFormatArg() {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));

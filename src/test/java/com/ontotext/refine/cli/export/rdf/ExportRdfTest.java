@@ -1,5 +1,6 @@
 package com.ontotext.refine.cli.export.rdf;
 
+import static com.ontotext.refine.cli.test.support.RefineResponder.exportHandler;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -132,11 +133,30 @@ class ExportRdfTest extends BaseProcessTest {
     }
   }
 
+  @Test
+  @ExpectedSystemExit(ExitCode.OK)
+  void shouldPassSuccessfullyProvidedSparql() throws IOException {
+    try {
+      URL resource = getClass().getClassLoader().getResource("construct.sparql");
+
+      String modelArg = "-q " + resource.getPath();
+      String uriArg = "-u " + responder.getUri();
+
+      commandExecutor().accept(args(PROJECT_ID, modelArg, uriArg));
+    } finally {
+      String errors = consoleErrors();
+      assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
+
+      assertFalse(consoleOutput().isEmpty(), "The output should not be empty, but it was.");
+    }
+  }
+
   private static Map<String, HttpRequestHandler> mockResponses() {
-    Map<String, HttpRequestHandler> handlers = new HashMap<>(3);
+    Map<String, HttpRequestHandler> handlers = new HashMap<>(4);
     handlers.put("/orefine/command/core/get-models", getModels());
     handlers.put("/rest/rdf-mapper/rdf/ontorefine:" + PROJECT_ID, RefineResponder.exportHandler());
     handlers.put("/orefine/command/core/get-processes", RefineResponder.noProcesses());
+    handlers.put("/repositories/ontorefine:" + PROJECT_ID, exportHandler());
     return handlers;
   }
 

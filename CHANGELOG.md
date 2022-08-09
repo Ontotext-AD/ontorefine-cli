@@ -12,6 +12,8 @@
    of `"text/line-based/*sv"`.
  - For this version of the CLI, the create project command will work and accept only `.csv` files and data format. The other types of files and formats will be
    gradually over the next few releases.
+ - Removed the `reconcile` command from the set of the available commands. It was incomplete and pretty much unusable in its the current state. In future releases
+   it could be re-introduced and improved for actual cases, where it can be useful. 
 
 ### Changes
 

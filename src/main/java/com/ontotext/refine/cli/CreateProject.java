@@ -1,5 +1,6 @@
 package com.ontotext.refine.cli;
 
+import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.UploadFormat;
 import com.ontotext.refine.client.command.RefineCommands;
@@ -53,6 +54,10 @@ class CreateProject extends Process {
 
   @Override
   public Integer call() throws Exception {
+    if (FileValidator.doesNotExists(file, "FILE")) {
+      return ExitCode.USAGE;
+    }
+
     try (RefineClient client = getClient()) {
 
       CreateProjectResponse response = RefineCommands

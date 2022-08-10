@@ -1,5 +1,6 @@
 package com.ontotext.refine.cli;
 
+import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.JsonOperation;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.ResponseCode;
@@ -42,6 +43,10 @@ class ApplyOperations extends Process {
 
   @Override
   public Integer call() throws Exception {
+    if (FileValidator.doesNotExists(operations, "OPERATIONS")) {
+      return ExitCode.USAGE;
+    }
+
     try (RefineClient client = getClient()) {
       String ops = IOUtils.toString(new FileInputStream(operations), StandardCharsets.UTF_8);
 

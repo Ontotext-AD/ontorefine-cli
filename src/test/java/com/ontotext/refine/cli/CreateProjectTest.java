@@ -53,6 +53,20 @@ class CreateProjectTest extends BaseProcessTest {
 
   @Test
   @ExpectedSystemExit(ExitCode.USAGE)
+  void shouldExitWithErrorOnNullFileArg() {
+    try {
+      commandExecutor().accept(args("null", "-u " + responder.getUri()));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[0];
+      assertTrue(
+          lastLine.contains("File with name 'null', provided for argument 'FILE' is unavailable."),
+          "Expected the error message to contain information about unavailable 'FILE' argument");
+    }
+  }
+
+  @Test
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldFailForUnsupportedFormat() {
     try {
       URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");

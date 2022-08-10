@@ -57,6 +57,22 @@ class ApplyOperationsTest extends BaseProcessTest {
 
   @Test
   @ExpectedSystemExit(ExitCode.USAGE)
+  void shouldExitWithErrorOnNullOperationsFileArg() {
+    try {
+      commandExecutor().accept(args("null", PROJECT_ID, "-u " + responder.getUri()));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[0];
+      assertTrue(
+          lastLine.contains(
+              "File with name 'null', provided for argument 'OPERATIONS' is unavailable."),
+          "Expected the error message to contain information about"
+          + " unavailable 'OPERATIONS' argument");
+    }
+  }
+
+  @Test
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingProjectArg() {
     try {
       commandExecutor().accept(args("operations.json", "-u " + responder.getUri()));

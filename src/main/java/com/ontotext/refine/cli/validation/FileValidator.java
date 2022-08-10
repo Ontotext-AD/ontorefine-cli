@@ -3,6 +3,7 @@ package com.ontotext.refine.cli.validation;
 import static java.lang.String.format;
 
 import java.io.File;
+import org.apache.commons.lang3.StringUtils;
 
 /**
  * Contains convenient methods for files validation.
@@ -16,6 +17,16 @@ public class FileValidator {
   }
 
   /**
+   * Checks whether the given file exists or not.
+   *
+   * @param file to be checked
+   * @return <code>true</code> if the file does not exists, <code>false</code> otherwise
+   */
+  public static boolean doesNotExists(File file) {
+    return !exists(file, null);
+  }
+
+  /**
    * Checks whether the given file exists or not. The method will print error message, when the file
    * isn't available, before returning <code>true</code>.
    *
@@ -24,20 +35,7 @@ public class FileValidator {
    * @return <code>true</code> if the file does not exists, <code>false</code> otherwise
    */
   public static boolean doesNotExists(File file, String argName) {
-    return !exists(file, argName, true);
-  }
-
-
-  /**
-   * Checks whether the given file exists or not. The method will print error message, when the file
-   * isn't available, before returning <code>false</code>.
-   *
-   * @param file to be checked
-   * @param argName the name of the argument for the file, used for the error message
-   * @return <code>true</code> if the file exists, <code>false</code> otherwise
-   */
-  public static boolean exists(File file, String argName) {
-    return exists(file, argName, true);
+    return !exists(file, argName);
   }
 
   /**
@@ -46,15 +44,14 @@ public class FileValidator {
    *
    * @param file to be checked
    * @param argName the name of the argument for the file, used for the error message
-   * @param shouldPrintError controls the error message printing
    * @return <code>true</code> if the file exists, <code>false</code> otherwise
    */
-  public static boolean exists(File file, String argName, boolean shouldPrintError) {
+  public static boolean exists(File file, String argName) {
     if (file != null && file.exists()) {
       return true;
     }
 
-    if (shouldPrintError) {
+    if (StringUtils.isNotBlank(argName)) {
       String error = file == null
           ? format("The provided path for argument '%s' does not lead to existing file.", argName)
           : format(

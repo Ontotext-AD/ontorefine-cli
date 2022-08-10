@@ -1,6 +1,5 @@
 package com.ontotext.refine.cli.validation;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -21,17 +20,17 @@ class FileValidatorTest {
   void existsCase() {
     File file = mock(File.class);
     when(file.exists()).thenReturn(Boolean.TRUE);
-    assertTrue(FileValidator.exists(file, "-test-arg", true));
+    assertTrue(FileValidator.exists(file, "-test-arg"));
   }
 
   @ParameterizedTest
   @ValueSource(strings = {"null", "/no"})
   void notExistCases(String value) {
-    assertFalse(FileValidator.exists(new File(value), "-test-arg", false));
+    assertTrue(FileValidator.doesNotExists(new File(value), null));
   }
 
   @Test
   void nullCases() {
-    assertFalse(FileValidator.exists(null, "-test-arg", false));
+    assertTrue(FileValidator.doesNotExists(null, "--test-arg"));
   }
 }

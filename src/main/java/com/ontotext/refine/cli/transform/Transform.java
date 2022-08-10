@@ -1,8 +1,10 @@
 package com.ontotext.refine.cli.transform;
 
 import static com.ontotext.refine.cli.utils.ExportUtils.awaitProcessesCompletion;
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
 import static com.ontotext.refine.cli.utils.PrintUtils.print;
 import static com.ontotext.refine.cli.utils.RdfExportUtils.export;
+import static com.ontotext.refine.cli.validation.FileValidator.doesNotExists;
 import static java.lang.String.format;
 
 import com.ontotext.refine.cli.Process;
@@ -97,19 +99,21 @@ public class Transform extends Process {
 
   @Override
   public Integer call() throws Exception {
+    if (doesNotExists(file, "FILE")) {
+      return ExitCode.USAGE;
+    }
+
+    if (doesNotExists(sparql) && doesNotExists(operations)) {
+      error("Expected at least one of '--operations' or '--sparql' parameters to be available.");
+      return ExitCode.USAGE;
+    }
+
     String project = null;
     RefineClient client = getClient();
     try {
-      if (sparql == null && operations == null) {
-        System.err.println(
-            "Expected at least one of '--operations' or '--sparql' parameters"
-                + " to be available.");
-        return ExitCode.USAGE;
-      }
-
       project = createProject(client);
 
-      if (operations != null && !applyOperations(project, client)) {
+      if (!applyOperations(project, client)) {
         return ExitCode.SOFTWARE;
       }
 
@@ -123,13 +127,12 @@ public class Transform extends Process {
 
       return ExitCode.OK;
     } catch (RefineException re) {
-      System.err.println(re.getMessage());
+      error(re.getMessage());
     } catch (Exception exc) {
-      String errorMessage = format(
+      error(
           "Unexpected error occurred during transformation of the dataset '%s'. Details: %s",
           file.getName(),
           exc.getMessage());
-      System.err.println(errorMessage);
     } finally {
       cleanup(project, client);
       IOUtils.closeQuietly(client);
@@ -151,6 +154,11 @@ public class Transform extends Process {
   }
 
   private boolean applyOperations(String project, RefineClient client) throws Exception {
+    // we should not try to apply the operations, if there aren't any
+    if (doesNotExists(operations)) {
+      return true;
+    }
+
     try (InputStream opsIs = new FileInputStream(operations)) {
       String ops = IOUtils.toString(opsIs, StandardCharsets.UTF_8);
 
@@ -163,13 +171,18 @@ public class Transform extends Process {
           .execute(client);
 
       if (ResponseCode.ERROR.equals(response.getCode())) {
-        System.err.println(format(
+        error(
             "Failed to apply transformation to dataset '%s' due to: %s",
             file.getName(),
-            response.getMessage()));
+            response.getMessage());
         return false;
       }
       return true;
+    } catch (Exception exc) { // NOSONAR
+      error(
+          "Failed to apply operations to dataset '%s'. Check if the provided JSON is correct.",
+          file.getName());
+      return false;
     }
   }
 

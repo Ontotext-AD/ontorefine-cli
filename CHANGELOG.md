@@ -29,7 +29,9 @@
 
 ### Bug fixes
 
- - TBD
+ - Fixed an issue, where if the user passes `null` or nonexistent file for the command arguments, the values will be accepted and the commands will proceed with
+   the execution. This behavior caused some unexpected errors in particular for the creation of the project command. Now the file parameters for the commands are
+   validated, before the execution of the commands logic.
 
 
 ## Version 1.0

@@ -65,6 +65,22 @@ class TransformTest extends BaseProcessTest {
 
   @Test
   @ExpectedSystemExit(ExitCode.USAGE)
+  void shouldExitWithErrorOnUnavailableDataset() {
+    try {
+      commandExecutor().accept(args("nonexistent", "-u " + responder.getUri()));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[0];
+      assertTrue(
+          lastLine.contains(
+              "File with name 'nonexistent', provided for argument 'FILE' is unavailable."),
+          "Expected the error message to contain information about unavailable 'FILE' argument");
+    }
+  }
+
+
+  @Test
+  @ExpectedSystemExit(ExitCode.USAGE)
   void shouldExitWithErrorOnMissingOperationsAndSparqlArgs() {
     try {
       URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");
@@ -123,28 +139,6 @@ class TransformTest extends BaseProcessTest {
       String lastLine = errorsArray[errorsArray.length - 1];
       assertEquals(
           "Failed to apply transformation to dataset 'Netherlands_restaurants.csv' due to: Failed!",
-          lastLine);
-    }
-  }
-
-  @Test
-  @ExpectedSystemExit(ExitCode.SOFTWARE)
-  void shouldFailGeneralError() {
-    try {
-      URL dataset = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");
-
-      String uriArg = "-u " + responder.getUri();
-      String operationsArg = "-o nonexistent-file";
-
-      commandExecutor().accept(args(dataset.getPath(), operationsArg, uriArg));
-    } finally {
-
-      String[] errorsArray = consoleErrors().split(System.lineSeparator());
-      String lastLine = errorsArray[errorsArray.length - 1];
-      assertEquals(
-          "Unexpected error occurred during transformation of the dataset"
-              + " 'Netherlands_restaurants.csv'. Details: nonexistent-file"
-              + " (No such file or directory)",
           lastLine);
     }
   }

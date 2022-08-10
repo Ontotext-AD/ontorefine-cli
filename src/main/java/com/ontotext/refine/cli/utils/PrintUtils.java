@@ -1,5 +1,7 @@
 package com.ontotext.refine.cli.utils;
 
+import static java.lang.String.format;
+
 import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.IOUtils;
@@ -28,5 +30,29 @@ public class PrintUtils {
     try (InputStream toPrint = is) {
       IOUtils.copy(toPrint, System.out);
     }
+  }
+
+  /**
+   * Prints information message in the console.
+   *
+   * @param template for the message
+   * @param args to be replaced in the template
+   * @see System#out
+   * @see String#format(String, Object...)
+   */
+  public static void info(String template, Object... args) {
+    System.out.println(format(template, args));
+  }
+
+  /**
+   * Prints error message in the console.
+   *
+   * @param template for the message
+   * @param args to be replaced in the template
+   * @see System#err
+   * @see String#format(String, Object...)
+   */
+  public static void error(String template, Object... args) {
+    System.err.println(format(template, args));
   }
 }

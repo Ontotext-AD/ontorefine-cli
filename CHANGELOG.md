@@ -36,6 +36,7 @@
  - Separated some of the commands in their own packages in order to keep the related logic grouped.
  - Exposed some of the internal classes and enumerations in order to reuse them in the composition commands like the new `transform`.
  - A lot of common logic that was extracted in utility class so that it can be reused in more commands and processes.
+ - Removed couple of values from the allowed RDF result formats, because they are not supported in the Ontotext Refine at the moment.
 
 ### Bug fixes
 

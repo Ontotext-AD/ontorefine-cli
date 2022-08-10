@@ -24,6 +24,14 @@
         </developer>
     </developers>
 
+    <distributionManagement>
+        <repository>
+            <id>all-onto</id>
+            <name>Ontotext Public Maven</name>
+            <url>http://maven.ontotext.com/content/repositories/public</url>
+        </repository>
+    </distributionManagement>
+
     <scm>
         <connection>scm:git:git@github.com:Ontotext-AD/ontorefine-cli.git</connection>
         <developerConnection>scm:git:git@github.com:Ontotext-AD/ontorefine-cli.git</developerConnection>
@@ -86,9 +94,6 @@
         <mockito.version>4.6.1</mockito.version>
 
         <checkstyle.enabled>true</checkstyle.enabled>
-
-        <internal.repo>https://maven.ontotext.com/content/repositories/owlim-releases</internal.repo>
-        <snapshots.repo>https://maven.ontotext.com/content/repositories/owlim-snapshots</snapshots.repo>
     </properties>
 
     <profiles>
@@ -274,19 +279,6 @@
             </plugin>
         </plugins>
     </build>
-
-    <distributionManagement>
-        <repository>
-            <id>internal</id>
-            <name>OWLIM Releases repository</name>
-            <url>${internal.repo}</url>
-        </repository>
-        <snapshotRepository>
-            <id>snapshots</id>
-            <name>OWLIM Snapshots repository</name>
-            <url>${snapshots.repo}</url>
-        </snapshotRepository>
-    </distributionManagement>
 
     <reporting>
         <plugins>

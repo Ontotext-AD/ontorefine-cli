@@ -4,7 +4,8 @@
 
 ### New
 
- - TBD
+ - Introduced new GitHub Workflow for project release. The workflow builds packages and deploys them in the Ontotext Public Maven Repository. The workflow is
+   triggered when new release is created though the GitHub release page.
  
 ### Breaking Changes
 

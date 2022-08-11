@@ -8,7 +8,6 @@ import static com.ontotext.refine.cli.utils.RdfExportUtils.export;
 import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.utils.RdfExportUtils.Using;
 import com.ontotext.refine.client.RefineClient;
-import com.ontotext.refine.client.command.rdf.ResultFormat;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import picocli.CommandLine.Command;
@@ -52,7 +51,7 @@ public class ExportRdf extends Process {
           + " The allowed values are: ${COMPLETION-CANDIDATES}",
       completionCandidates = AllowedRdfResultFormat.class,
       defaultValue = "turtle")
-  private ResultFormat format;
+  private RdfResultFormats format;
 
   @Override
   public Integer call() {

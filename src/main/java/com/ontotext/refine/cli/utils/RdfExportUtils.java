@@ -1,10 +1,10 @@
 package com.ontotext.refine.cli.utils;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.ontotext.refine.cli.export.rdf.RdfResultFormats;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.models.GetProjectModelsResponse;
-import com.ontotext.refine.client.command.rdf.ResultFormat;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +38,7 @@ public class RdfExportUtils {
   public static InputStream export(
       String project,
       File mappingFile,
-      ResultFormat resultFormat,
+      RdfResultFormats resultFormat,
       Using using,
       RefineClient client)
       throws IOException {
@@ -56,13 +56,13 @@ public class RdfExportUtils {
   private static InputStream sparqlExport(
       String project,
       File mappingFile,
-      ResultFormat format,
+      RdfResultFormats format,
       RefineClient client) throws IOException {
     return RefineCommands
         .exportAsRdf()
         .setProject(project)
         .setQuery(readFile(mappingFile))
-        .setFormat(format)
+        .setFormat(format.getFormat())
         .build()
         .execute(client)
         .getResultStream();
@@ -79,14 +79,14 @@ public class RdfExportUtils {
   private static InputStream mappingExport(
       String project,
       File mappingFile,
-      ResultFormat format,
+      RdfResultFormats format,
       RefineClient client)
       throws IOException {
     return RefineCommands
         .exportRdf()
         .setProject(project)
         .setMapping(getRdfMapping(mappingFile, project, client))
-        .setFormat(format)
+        .setFormat(format.getFormat())
         .build()
         .execute(client)
         .getResultStream();

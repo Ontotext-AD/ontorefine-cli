@@ -51,14 +51,10 @@ public class ExportUtils {
   public static void awaitProcessesCompletion(
       String project, Duration refreshPeriod, Duration timeout, RefineClient client)
       throws RefineException {
-    long interuptTime = System.currentTimeMillis() + timeout.toMillis();
-
     GetProcessesCommand command = RefineCommands.getProcesses().setProject(project).build();
     Collection<ProjectProcess> processes = command.execute(client).getProcesses();
-    while (!processes.isEmpty()) {
-      if (interuptTime < System.currentTimeMillis()) {
-        return;
-      }
+    long interuptTime = System.currentTimeMillis() + timeout.toMillis();
+    while (!processes.isEmpty() && interuptTime > System.currentTimeMillis()) {
 
       sleep(refreshPeriod);
 

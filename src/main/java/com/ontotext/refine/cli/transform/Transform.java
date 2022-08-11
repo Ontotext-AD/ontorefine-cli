@@ -153,7 +153,7 @@ public class Transform extends Process {
         .getProjectId();
   }
 
-  private boolean applyOperations(String project, RefineClient client) throws Exception {
+  private boolean applyOperations(String project, RefineClient client) {
     // we should not try to apply the operations, if there aren't any
     if (doesNotExists(operations)) {
       return true;

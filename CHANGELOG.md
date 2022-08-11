@@ -8,7 +8,7 @@
    triggered when new release is created though the GitHub release page.
  - Introduced new command for transformation of specific dataset to different format. In this version the command will support only transformation of CSV to RDF.
    The goal for future releases is to gradually add more types of transformations like JSON to CSV, XML to TSV, etc. Basically the only limitations are going to be
-   releated to what Ontotext Refine can accept as input for the project data and in what format can that data be exported afterwards.
+   related, to what Ontotext Refine can accept as input for the project data and in what format can that data be exported afterwards.
  
 ### Breaking Changes
 
@@ -44,7 +44,7 @@
    the execution. This behavior caused some unexpected errors in particular for the creation of the project command. Now the file parameters for the commands are
    validated, before the execution of the commands logic.
  - Fixed the issue with the RDF export command, where if the user provides JSON document as mapping retrieved from the RDF Mapper UI, instead of the operations tab
-   in the OpenRefine UI, the command fails with error. Related issue: #8.
+   in the OpenRefine UI, the command fails with error. Related issue: [#8](https://github.com/Ontotext-AD/ontorefine-cli/issues/8).
 
 
 ## Version 1.0

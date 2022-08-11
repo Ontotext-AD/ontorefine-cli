@@ -90,8 +90,8 @@ public @interface ExpectedSystemExit {
     @Override
     public void afterEach(final ExtensionContext context) {
       System.setSecurityManager(systemSecurityManager);
-      assertEquals(expected, proxy.code,
-          "Expected System.exit(" + expected + ") but it was never invoked.");
+      assertEquals(
+          expected, proxy.code, "Expected System.exit(" + expected + ") but it was never invoked.");
     }
   }
 

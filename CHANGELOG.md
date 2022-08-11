@@ -1,4 +1,12 @@
-# OntoRefine CLI
+# Ontotext Refine CLI
+
+## Version 1.1.1
+
+### New
+
+ - Added detailed documentation about the project. The documentation describes the project main dependencies, provides details about the different supported
+   commands and more.
+
 
 ## Version 1.1
 

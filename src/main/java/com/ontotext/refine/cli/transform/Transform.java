@@ -11,13 +11,13 @@ import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.create.AllowedInputDataFormats;
 import com.ontotext.refine.cli.create.InputDataFormat;
 import com.ontotext.refine.cli.export.rdf.AllowedRdfResultFormat;
+import com.ontotext.refine.cli.export.rdf.RdfResultFormats;
 import com.ontotext.refine.cli.utils.RdfExportUtils.Using;
 import com.ontotext.refine.client.JsonOperation;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.operations.ApplyOperationsResponse;
-import com.ontotext.refine.client.command.rdf.ResultFormat;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,7 +83,7 @@ public class Transform extends Process {
           + " '${DEFAULT-VALUE}'. The allowed values are: ${COMPLETION-CANDIDATES}",
       completionCandidates = AllowedRdfResultFormat.class,
       defaultValue = "turtle")
-  private ResultFormat result;
+  private RdfResultFormats result;
 
   @Option(
       names = "--no-clean",

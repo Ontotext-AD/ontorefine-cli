@@ -11,6 +11,8 @@
    related, to what Ontotext Refine can accept as input for the project data and in what format can that data be exported afterwards.
  - Enhanced the `rdf` command to accept parameter for SPARQL query. The query is used for the mapping of the project data to RDF and it takes precedence, when there
    is a mapping and a query provided.
+ - Added new Enum for allowed RDF result formats. It will allow additional filtering the allowed formats that are going to be supported by the CLI. Also provides
+   the correct message, when the format value does not match any of the allowed formats.
  
 ### Breaking Changes
 

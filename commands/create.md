@@ -1,4 +1,4 @@
-# create
+# Create
 
 Creates a refine project using given dataset.
 

@@ -19,7 +19,14 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "register-service",
     description = "Registers an additional reconciliation service.",
-    separator = " ")
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 class RegisterReconService extends Process {
 
   @Parameters(

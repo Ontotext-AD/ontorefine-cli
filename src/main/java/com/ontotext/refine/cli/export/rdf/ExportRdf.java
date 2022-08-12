@@ -22,8 +22,15 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "rdf",
-    description = "Converts the data of a project to RDF format.",
-    separator = " ")
+    description = "Exports the data of a project to RDF format.",
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 public class ExportRdf extends Process {
 
   @Parameters(

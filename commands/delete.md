@@ -1,4 +1,4 @@
-# delete
+# Delete
 
 Deletes a specific project from Ontotext Refine workspace.
 

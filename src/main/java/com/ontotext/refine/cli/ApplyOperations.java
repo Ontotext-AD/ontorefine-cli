@@ -23,7 +23,14 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "apply",
     description = "Applies transformation operations to a project.",
-    separator = " ")
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 class ApplyOperations extends Process {
 
   @Parameters(

@@ -1,4 +1,4 @@
-# rdf
+# RDF
 
 Exports the data of a given project in RDF format.
 

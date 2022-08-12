@@ -1,4 +1,4 @@
-# extract
+# Extract
 
 Extracts all of the operations that are applied on project data.
 

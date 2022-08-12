@@ -21,6 +21,11 @@ class MainTest extends BaseProcessTest {
   protected void shouldFailOnMissingRefineUrl() {
     // not applicable to main command
   }
+  
+  @Override
+  protected void shouldMatchCommandHelpInDocumentation() {
+    // not applicable to main command
+  }
 
   @Test
   @ExpectedSystemExit(ExitCode.USAGE)

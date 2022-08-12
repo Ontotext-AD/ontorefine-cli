@@ -16,8 +16,15 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "delete",
-    description = "Deletes a project from OntoRefine.",
-    separator = " ")
+    description = "Deletes a project from Ontotext Refine.",
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 class DeleteProject extends Process {
 
   @Parameters(

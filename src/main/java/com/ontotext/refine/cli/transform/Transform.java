@@ -45,7 +45,14 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "transform",
     description = "Transforms given dataset into different data format.",
-    separator = " ")
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 public class Transform extends Process {
 
   @Parameters(

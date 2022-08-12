@@ -1,4 +1,4 @@
-# register-service
+# Register-service
 
 Registers an additional service for reconciliation that can be used in the Ontotext Refine web interface.
 

@@ -13,10 +13,16 @@ import picocli.CommandLine.ExitCode;
  * @author Antoniy Kunchev
  */
 @Command(
-    name = "version",
-    description = "Retrieves the version of the OntoRefine instance.",
+    name = "refine-version",
+    description = "Retrieves the version of the Ontotext Refine instance.",
     separator = " ",
-    hidden = true)
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 class RetrieveVersion extends Process {
 
   @Override

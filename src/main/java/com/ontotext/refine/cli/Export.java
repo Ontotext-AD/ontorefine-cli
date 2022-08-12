@@ -23,8 +23,15 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "export",
-    description = "Exports the data of a project in CSV or JSON format.",
-    separator = " ")
+    description = "Exports the data of a project in CSV format.",
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 class Export extends Process {
 
   @Parameters(

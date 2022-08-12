@@ -16,7 +16,14 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "extract",
     description = "Extracts the operations of a project in JSON format.",
-    separator = " ")
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 class ExtractOperations extends Process {
 
   @Parameters(

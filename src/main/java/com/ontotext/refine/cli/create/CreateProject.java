@@ -21,7 +21,14 @@ import picocli.CommandLine.Parameters;
 @Command(
     name = "create",
     description = "Creates a new project from a file.",
-    separator = " ")
+    separator = " ",
+    sortOptions = false,
+    headerHeading = "Usage:%n",
+    synopsisHeading = "%n",
+    descriptionHeading = "%nDescription:%n",
+    parameterListHeading = "%nParameters:%n",
+    optionListHeading = "%nOptions:%n",
+    mixinStandardHelpOptions = true)
 public class CreateProject extends Process {
 
   @Parameters(

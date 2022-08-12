@@ -1,4 +1,4 @@
-# refine-version
+# Refine-version
 
 Retrieves the current version of the Ontotext Refine.
 

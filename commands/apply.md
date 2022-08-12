@@ -1,4 +1,4 @@
-# apply
+# Apply
 
 Applies operations to a specified project data.
 

@@ -6,6 +6,8 @@
 
  - Added detailed documentation about the project. The documentation describes the project main dependencies, provides details about the different supported
    commands and more.
+ - Added `--help` option to each command. It will provide details about the command and the arguments that can be provided to it. The information is used in the
+   documentation and to keep it up-to-date, when there are changes, we've added unit tests, which will fail, when there are mismatches.
 
 
 ## Version 1.1

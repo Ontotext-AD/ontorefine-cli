@@ -1,15 +1,19 @@
 package com.ontotext.refine.cli;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
 import java.io.PrintStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
+import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -78,6 +82,31 @@ public abstract class BaseProcessTest {
     } finally {
       assertTrue(assertMissingArgError().contains("'--url <url>'"));
     }
+  }
+
+  @Test
+  @ExpectedSystemExit(ExitCode.OK)
+  protected void shouldMatchCommandHelpInDocumentation() {
+    try {
+      commandExecutor().accept(args("-h"));
+    } finally {
+      assertEquals(loadAndNormalizeCommandHelp(), consoleOutput());
+    }
+  }
+
+  private String loadAndNormalizeCommandHelp() {
+    String command = command().getAnnotation(CommandLine.Command.class).name();
+    try {
+      File doc = new File("commands/" + command + ".md");
+      assertTrue(doc.exists(), "Expected the file " + doc.getAbsolutePath() + " to exist");
+      return trimToCommandHelp(IOUtils.toString(doc.toURI(), StandardCharsets.UTF_8));
+    } catch (IOException ioe) {
+      throw new AssertionError("Failed to load the documentation for command: " + command, ioe);
+    }
+  }
+
+  private String trimToCommandHelp(String value) {
+    return StringUtils.substringBetween(value, "```bash", "```").stripLeading();
   }
 
   /**

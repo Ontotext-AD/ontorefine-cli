@@ -18,8 +18,6 @@ public enum RdfResultFormats {
 
   TURTLESTAR(ResultFormat.TURTLESTAR),
 
-  N3(ResultFormat.N3),
-
   TRIX(ResultFormat.TRIX),
 
   TRIG(ResultFormat.TRIG),

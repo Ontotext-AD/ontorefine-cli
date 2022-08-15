@@ -9,6 +9,11 @@
  - Added `--help` option to each command. It will provide details about the command and the arguments that can be provided to it. The information is used in the
    documentation and to keep it up-to-date, when there are changes, we've added unit tests, which will fail, when there are mismatches.
 
+### Changes
+
+ - Removed the `N3` RDF result format as an option, when exporting in RDF. `N3` is a subset of `Turtle` and the internal library used to produce the different
+   formats just writes `Turtle` for both options. This is done in order to prevent confusing moments, when the user expects different formats.
+
 
 ## Version 1.1
 

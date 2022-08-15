@@ -42,8 +42,8 @@ Options:
                             for RDFization of the provided dataset.
   -r, --result <result>   Controls the output format of the result. The default
                             format is 'turtle'. The allowed values are: rdfxml,
-                            ntriples, turtle, turtlestar, n3, trix, trig,
-                            trigstar, binary, nquads, jsonld, rdfjson
+                            ntriples, turtle, turtlestar, trix, trig, trigstar,
+                            binary, nquads, jsonld, rdfjson
       --[no-]clean        Controls the cleaning of the project after the
                             operation execution. When enabled the clean up will
                             be executed regardless of the success of the

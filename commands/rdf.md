@@ -32,8 +32,8 @@ Options:
                               configurations, if it is defined there.
   -f, --format <format>     Controls the format of the result. The default
                               format is 'turtle'. The allowed values are:
-                              rdfxml, ntriples, turtle, turtlestar, n3, trix,
-                              trig, trigstar, binary, nquads, jsonld, rdfjson
+                              rdfxml, ntriples, turtle, turtlestar, trix, trig,
+                              trigstar, binary, nquads, jsonld, rdfjson
   -h, --help                Show this help message and exit.
   -V, --version             Print version information and exit.
 ```

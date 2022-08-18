@@ -3,7 +3,7 @@
 
     <groupId>com.ontotext</groupId>
     <artifactId>ontorefine-cli</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>A command-line interface for execution of operations in Ontotext Refine</description>
@@ -86,7 +86,7 @@
         <dependency.check.plugin.version>7.1.1</dependency.check.plugin.version>
         <jacoco.version>0.8.8</jacoco.version>
 
-        <ontorefine.client.version>1.7.0</ontorefine.client.version>
+        <ontorefine.client.version>1.7.1</ontorefine.client.version>
         <picocli.version>4.6.3</picocli.version>
 
         <slf4j.version>1.7.32</slf4j.version>

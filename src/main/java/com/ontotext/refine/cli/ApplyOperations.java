@@ -1,5 +1,8 @@
 package com.ontotext.refine.cli;
 
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
+import static com.ontotext.refine.cli.utils.PrintUtils.info;
+
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.JsonOperation;
 import com.ontotext.refine.client.RefineClient;
@@ -38,7 +41,7 @@ class ApplyOperations extends Process {
       arity = "1",
       paramLabel = "OPERATIONS",
       description = "The file with the operations that should be applied to the project."
-          + " The file should be a JSON file.")
+          + " The file should contain JSON.")
   private File operations;
 
   @Parameters(
@@ -54,8 +57,9 @@ class ApplyOperations extends Process {
       return ExitCode.USAGE;
     }
 
-    try (RefineClient client = getClient()) {
-      String ops = IOUtils.toString(new FileInputStream(operations), StandardCharsets.UTF_8);
+    try (RefineClient client = getClient();
+        FileInputStream operationsStream = new FileInputStream(operations)) {
+      String ops = IOUtils.toString(operationsStream, StandardCharsets.UTF_8);
 
       ApplyOperationsResponse response = RefineCommands
           .applyOperations()
@@ -66,19 +70,17 @@ class ApplyOperations extends Process {
           .execute(client);
 
       if (ResponseCode.ERROR.equals(response.getCode())) {
-        String error = String.format(
+        error(
             "Failed to apply transformation to project '%s' due to: %s",
             project,
             response.getMessage());
-
-        System.err.println(error);
         return ExitCode.SOFTWARE;
       }
 
-      System.out.println("The transformations were successfully applied to project: " + project);
+      info("The transformations were successfully applied to project: %s", project);
       return ExitCode.OK;
     } catch (RefineException re) {
-      System.err.println(re.getMessage());
+      error(re.getMessage());
     }
     return ExitCode.SOFTWARE;
   }

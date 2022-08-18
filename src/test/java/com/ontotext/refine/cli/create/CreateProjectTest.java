@@ -120,7 +120,7 @@ class CreateProjectTest extends BaseProcessTest {
       assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
 
       assertEquals(
-          "The project with id '1812661014997' was created successfully.",
+          "Successfully created project with identifier: 1812661014997",
           consoleOutput().trim());
     }
   }

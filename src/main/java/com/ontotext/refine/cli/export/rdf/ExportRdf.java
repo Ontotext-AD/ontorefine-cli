@@ -36,25 +36,25 @@ public class ExportRdf extends Process {
   @Parameters(
       index = "0",
       paramLabel = "PROJECT",
-      description = "The project whose data to convert.")
+      description = "The project whose data to converted to RDF.")
   private String project;
 
   @Option(
       names = {"-q", "--sparql"},
-      description = "A file containing SPARQL CONSTRUCT query to be used for RDFization of the"
-          + " provided dataset.")
+      description = "A file containing SPARQL CONSTRUCT query to be used for RDF conversion.")
   private File sparql;
 
   @Option(
       names = {"-m", "--mapping"},
       description = "The mapping that will be used for the RDF conversion. The file should contain"
           + " JSON configuration. If not provided the process will try to retrieve it from the"
-          + " project configurations, if it is defined there.")
+          + " project configurations.")
   private File mapping;
 
   @Option(
       names = {"-f", "--format"},
-      description = "Controls the format of the result. The default format is '${DEFAULT-VALUE}'."
+      description = "Controls the format of the result."
+          + " The default format is '${DEFAULT-VALUE}'."
           + " The allowed values are: ${COMPLETION-CANDIDATES}",
       completionCandidates = AllowedRdfResultFormat.class,
       defaultValue = "turtle")

@@ -1,9 +1,9 @@
 # Delete
 
-Deletes a specific project from Ontotext Refine workspace.
+Deletes a specific project from the Ontotext Refine workspace.
 
-The command uses the provided identifier to remove the project and its data from the worksplace.
-The result from the command is the status of the execution.
+The command uses the provided identifier to remove the project and its data.
+The result from the command is a message with the status from the execution.
 
 ## Arguments
 
@@ -16,7 +16,7 @@ Description:
 Deletes a project from Ontotext Refine.
 
 Parameters:
-      PROJECT       The identifier of the project to delete.
+      PROJECT       The identifier of the project that should be deleted.
 
 Options:
   -u, --url <url>   The URL of the Ontotext Refine instance to connect to, e.g.

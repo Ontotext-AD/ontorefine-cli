@@ -1,10 +1,10 @@
 # Extract
 
-Extracts all of the operations that are applied on project data.
+Extracts all operations applied to a project.
 
-The command makes a request to Ontotext Refine to extract the history of the operations that are applied to the data.
-The result from the command should be an JSON document containing the applied operations or empty array, if no
-operations are applied to the specified project yet.
+The command makes a request to Ontotext Refine to extract the history of the operations which were applied to the data.
+The result from the command is a JSON document containing the applied operations or empty array, if no operations are
+applied to the specified project.
 
 ## Arguments
 
@@ -14,7 +14,7 @@ Usage:
 ontorefine-cli extract [-hV] -u <url> PROJECT
 
 Description:
-Extracts the operations of a project in JSON format.
+Extracts the operations history of a project in JSON format.
 
 Parameters:
       PROJECT       The project whose operations to extract.

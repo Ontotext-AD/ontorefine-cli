@@ -13,6 +13,9 @@
 
  - Removed the `N3` RDF result format as an option, when exporting in RDF. `N3` is a subset of `Turtle` and the internal library used to produce the different
    formats just writes `Turtle` for both options. This is done in order to prevent confusing moments, when the user expects different formats.
+ - Improved some of the description of the commands and their arguments.
+ - Improved some of the output messages from the commands.
+ - Updated the version of the `ontorefine-client` library to `1.7.1`. It introduces some fixes for issues related to creation of the projects.
 
 
 ## Version 1.1

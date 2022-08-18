@@ -1,5 +1,8 @@
 package com.ontotext.refine.cli.create;
 
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
+import static com.ontotext.refine.cli.utils.PrintUtils.info;
+
 import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.RefineClient;
@@ -41,8 +44,7 @@ public class CreateProject extends Process {
 
   @Option(
       names = {"-n", "--name"},
-      description = "The name of the OntoRefine project to create. If not provided,"
-          + " the file name will be used.")
+      description = "A name for the Refine project. If not provided, the file name will be used.")
   private String name;
 
   @Option(
@@ -74,12 +76,10 @@ public class CreateProject extends Process {
           .build()
           .execute(client);
 
-      String message = String.format(
-          "The project with id '%s' was created successfully.", response.getProjectId());
-      System.out.println(message);
+      info("Successfully created project with identifier: %s", response.getProjectId());
       return ExitCode.OK;
     } catch (RefineException re) {
-      System.err.println(re.getMessage());
+      error(re.getMessage());
     }
     return ExitCode.SOFTWARE;
   }

@@ -1,5 +1,8 @@
 package com.ontotext.refine.cli;
 
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
+import static com.ontotext.refine.cli.utils.PrintUtils.info;
+
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
@@ -30,12 +33,13 @@ class DeleteProject extends Process {
   @Parameters(
       index = "0",
       paramLabel = "PROJECT",
-      description = "The identifier of the project to delete.")
+      description = "The identifier of the project that should be deleted.")
   private String project;
 
   @Override
   public Integer call() throws Exception {
     try (RefineClient client = getClient()) {
+
       DeleteProjectResponse response = RefineCommands.deleteProject()
           .project(project)
           .token(getToken())
@@ -43,18 +47,17 @@ class DeleteProject extends Process {
           .execute(client);
 
       if (ResponseCode.ERROR.equals(response.getCode())) {
-        String error = String.format(
-            "Failed to delete project with id '%s' due to: %s",
+        error(
+            "Failed to delete project with identifier '%s' due to: %s",
             project,
             response.getMessage());
-        System.err.println(error);
         return ExitCode.SOFTWARE;
       }
 
-      System.out.println(String.format("Successfully deleted project with id: '%s'", project));
+      info("Successfully deleted project with identifier: %s", project);
       return ExitCode.OK;
     } catch (RefineException re) {
-      System.err.println(re.getMessage());
+      error(re.getMessage());
     }
     return ExitCode.SOFTWARE;
   }

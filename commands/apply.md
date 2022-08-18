@@ -1,9 +1,9 @@
 # Apply
 
-Applies operations to a specified project data.
+Applies operations to a specified project.
 
-The command uses the provided JSON document with operations to apply them to the project data.
-The result of the command should be message with the status of the execution.
+The command uses the provided JSON document with operations and to applies them to the project.
+The result of the command is a message with the status of the execution.
 
 ## Arguments
 
@@ -17,7 +17,7 @@ Applies transformation operations to a project.
 
 Parameters:
       OPERATIONS    The file with the operations that should be applied to the
-                      project. The file should be a JSON file.
+                      project. The file should contain JSON.
       PROJECT       The identifier of the project to which the transformation
                       operations will be applied.
 

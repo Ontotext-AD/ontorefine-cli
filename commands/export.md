@@ -3,7 +3,7 @@
 Exports the data of a given project in CSV format.
 
 The command extracts the data of the project and transforms it to CSV format.
-The result of the command is the project data in CSV format.
+The result of the command is the project data in the requested format.
 
 ## Arguments
 

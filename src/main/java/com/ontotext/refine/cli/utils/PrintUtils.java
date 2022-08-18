@@ -33,7 +33,7 @@ public class PrintUtils {
   }
 
   /**
-   * Prints information message in the console.
+   * Prints an information message in the console.
    *
    * @param template for the message
    * @param args to be replaced in the template
@@ -45,7 +45,7 @@ public class PrintUtils {
   }
 
   /**
-   * Prints error message in the console.
+   * Prints an error message in the console.
    *
    * @param template for the message
    * @param args to be replaced in the template

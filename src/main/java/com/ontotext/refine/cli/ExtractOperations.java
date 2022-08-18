@@ -15,7 +15,7 @@ import picocli.CommandLine.Parameters;
  */
 @Command(
     name = "extract",
-    description = "Extracts the operations of a project in JSON format.",
+    description = "Extracts the operations history of a project in JSON format.",
     separator = " ",
     sortOptions = false,
     headerHeading = "Usage:%n",

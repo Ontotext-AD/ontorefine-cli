@@ -2,15 +2,17 @@
 
 Transforms a dataset into another specific format.
 
-The command represents a composition of several other commands in order to allow complete transformation pipeline
-for processing of datasets.
+The command represents a composition of several other commands in order to allow complete transformation pipeline for
+processing of datasets.
 The phases of the command are:
+
 - create project
 - apply operations, if there are any
-- export the data in the specified format
+- export the data in the specified format using the provided mapping or SPARQL query
+- delete the project
 
-At the moment the command only supports transformation of CSV to RDF, but it will be gradually extended with more
-options of transformation.
+At the moment the command supports only transformation of CSV to RDF, but it will be gradually extended with more
+options.
 
 ## Arguments
 

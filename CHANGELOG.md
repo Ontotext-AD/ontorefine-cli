@@ -1,5 +1,16 @@
 # Ontotext Refine CLI
 
+## Version 1.1.2
+
+### New
+
+ - TBD
+
+### Changes
+
+ - TBD
+
+
 ## Version 1.1.1
 
 ### New

@@ -1,8 +1,10 @@
-package com.ontotext.refine.cli;
+package com.ontotext.refine.cli.operations;
 
+import static com.ontotext.refine.cli.operations.OperationsUtil.getOperations;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
 import static com.ontotext.refine.cli.utils.PrintUtils.info;
 
+import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.JsonOperation;
 import com.ontotext.refine.client.RefineClient;
@@ -11,9 +13,6 @@ import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.operations.ApplyOperationsResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
-import java.io.FileInputStream;
-import java.nio.charset.StandardCharsets;
-import org.apache.commons.io.IOUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Parameters;
@@ -34,7 +33,7 @@ import picocli.CommandLine.Parameters;
     parameterListHeading = "%nParameters:%n",
     optionListHeading = "%nOptions:%n",
     mixinStandardHelpOptions = true)
-class ApplyOperations extends Process {
+public class ApplyOperations extends Process {
 
   @Parameters(
       index = "0",
@@ -57,15 +56,13 @@ class ApplyOperations extends Process {
       return ExitCode.USAGE;
     }
 
-    try (RefineClient client = getClient();
-        FileInputStream operationsStream = new FileInputStream(operations)) {
-      String ops = IOUtils.toString(operationsStream, StandardCharsets.UTF_8);
+    try (RefineClient client = getClient()) {
 
       ApplyOperationsResponse response = RefineCommands
           .applyOperations()
           .project(project)
           .token(getToken())
-          .operations(JsonOperation.from(ops))
+          .operations(JsonOperation.from(getOperations(operations)))
           .build()
           .execute(client);
 

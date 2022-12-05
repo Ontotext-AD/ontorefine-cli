@@ -91,7 +91,7 @@ class TransformTest extends BaseProcessTest {
       String[] errorsArray = consoleErrors().split(System.lineSeparator());
       String lastLine = errorsArray[0];
       assertEquals(
-          "Expected at least one of '--operations' or '--sparql' parameters to be available.",
+          "Expected at least one of '--configurations' or '--sparql' parameters to be available.",
           lastLine);
     }
   }
@@ -105,7 +105,7 @@ class TransformTest extends BaseProcessTest {
       URL operations = getClass().getClassLoader().getResource("operations.json");
 
       String uriArg = "-u " + responder.getUri();
-      String operationsArg = "-o " + operations.getPath();
+      String operationsArg = "-c " + operations.getPath();
 
       commandExecutor().accept(args(dataset.getPath(), operationsArg, uriArg));
     } finally {
@@ -129,7 +129,7 @@ class TransformTest extends BaseProcessTest {
       URL operations = getClass().getClassLoader().getResource("operations.json");
 
       String uriArg = "-u " + responder.getUri();
-      String operationsArg = "-o " + operations.getPath();
+      String operationsArg = "-c " + operations.getPath();
 
       commandExecutor().accept(args(dataset.getPath(), operationsArg, "--no-clean", uriArg));
     } finally {
@@ -151,7 +151,7 @@ class TransformTest extends BaseProcessTest {
       URL operations = getClass().getClassLoader().getResource("operations.json");
 
       String uriArg = "-u " + responder.getUri();
-      String operationsArg = "-o " + operations.getPath();
+      String operationsArg = "-c " + operations.getPath();
 
       commandExecutor().accept(args(dataset.getPath(), operationsArg, uriArg));
     } finally {

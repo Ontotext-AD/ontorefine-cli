@@ -96,9 +96,7 @@ class ExportRdfTest extends BaseProcessTest {
     } finally {
       String[] errorsArray = consoleErrors().split(System.lineSeparator());
       String lastLine = errorsArray[errorsArray.length - 1];
-      assertEquals(
-          "Failed to read the mapping from file: 'test-classes'.",
-          lastLine.trim());
+      assertEquals("Failed to parse JSON file: 'test-classes'.", lastLine.trim());
     }
   }
 

@@ -1,0 +1,24 @@
+{
+  "importOptions": [
+    {
+      "encoding": "",
+      "separator": ",",
+      "ignoreLines": -1,
+      "headerLines": 1,
+      "skipDataLines": 0,
+      "limit": -1,
+      "storeBlankRows": true,
+      "guessCellValueTypes": false,
+      "processQuotes": true,
+      "quoteCharacter": "\"",
+      "storeBlankCellsAsNulls": true,
+      "includeFileSources": false,
+      "projectName": "Netherlands_restaurants-17.08",
+      "projectTags": [
+        ""
+      ],
+      "fileSource": "Netherlands_restaurants-csv.csv"
+    }
+  ],
+  "operations": []
+}

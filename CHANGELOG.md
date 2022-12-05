@@ -1,14 +1,38 @@
 # Ontotext Refine CLI
 
-## Version 1.1.2
+## Version 1.2
 
 ### New
 
- - TBD
+ - Introduced new argument to the create project command. It will provide the import options for the datasets, when the project is created. These options are
+   carrying information how the dataset should be parsed in order to be represented as tabular data.
+   The argument is called `--configurations` and it accepts path to file, containing the JSON with import options.
+ - Introduced few new utility class related to the processing of the project configurations for the different commands.
+ - Added few new test resources, primary related to the new functionality for the project configurations.
 
 ### Changes
 
- - TBD
+ - Enhanced the apply operations command to accept and work with the new types of the configurations for the project. Now the command will try to parse the provided
+   JSON document and extract only the operations history in order to apply it to the project. The JSON can be as full project configuration, only the operations part
+   of it, or as usual the standard operations history JSON.
+ - Refactored and renamed `ExtractOperataions` command. Now the class is called `ExtractConfigurations` and it has new argument. This argument controls, which
+   project configuration will be extracted. Currently the supported options are: `operations` (the default), `import-options` and `full`.
+   We left the `operations` as default in order to avoid introducing breaking changes to the command. It acts as the previous command and returns the same result.
+   The `import-options` will extract only the project import options and the `full` extracts both, the import options and operations history for the specified
+   project.
+   We've decided to do the extraction of all project configurations with single command, instead of introducing several other, because we plan to add more in the
+   future. 
+ - Moved some classes in their own packages in order to group the logic and the classes related to the same functionality.
+ - Updated the versions of the third party dependencies as some of them had security vulnerabilities.
+
+### Breaking Changes
+
+ - Refactored the `transform` command to work with the new type of project configurations. The breaking change is that the previous argument for `--operations`
+   is now changed to `--configurations`. It accepts all type of JSON, containing only operation history, only project import options or full set of configurations.
+   The argument is enhanced version of the previous, because it will allow the users to define how the dataset should be parsed before the operations are applied to
+   it, thus allowing the command to work with more dataset formats than only `CSV`.
+   We've decided to replace the old argument with new one, because we plan to add more configurations to the current JSON and it will be more convenient to have one
+   argument accepting all of them, instead of having a multiple arguments for each.
 
 
 ## Version 1.1.1

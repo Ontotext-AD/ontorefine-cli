@@ -1,5 +1,7 @@
 package com.ontotext.refine.cli.create;
 
+import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration.IMPORT_OPTIONS;
+import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
 import static com.ontotext.refine.cli.utils.PrintUtils.info;
 
@@ -7,6 +9,7 @@ import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
+import com.ontotext.refine.client.command.create.CreateProjectCommand.Builder;
 import com.ontotext.refine.client.command.create.CreateProjectResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
@@ -39,7 +42,7 @@ public class CreateProject extends Process {
       paramLabel = "FILE",
       description = "The file that will be used to create the project."
           + " It should be a full name with one of the supported extensions"
-          + " (csv).") // tsv, xml, json, txt, xls, xlsx, ods
+          + " (csv).") // tsv, , json, txt, xls, xlsx, ods
   private File file;
 
   @Option(
@@ -55,9 +58,12 @@ public class CreateProject extends Process {
       defaultValue = "csv")
   private InputDataFormat format;
 
-  // TODO we need additional argument for the options for the project
-  // the options are metadata for the project and the file. For some files it is required to provide
-  // an initial parsing point to the refine tool. Example JSON, XML, etc.
+  @Option(
+      names = {"-c", "--configurations"},
+      description = "File containing configurations for the importing process of the dataset."
+          + " It includes information how to parse the input data so that it can be represented"
+          + " in tabular form and additioanl options related to the project creation.")
+  private File configurations;
 
   @Override
   public Integer call() throws Exception {
@@ -67,14 +73,18 @@ public class CreateProject extends Process {
 
     try (RefineClient client = getClient()) {
 
-      CreateProjectResponse response = RefineCommands
+      Builder command = RefineCommands
           .createProject()
           .file(file)
           .format(format.toUploadFormat())
           .name(StringUtils.defaultIfBlank(name, file.getName()))
-          .token(getToken())
-          .build()
-          .execute(client);
+          .token(getToken());
+
+      if (configurations != null) {
+        get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::asText));
+      }
+
+      CreateProjectResponse response = command.build().execute(client);
 
       info("Successfully created project with identifier: %s", response.getProjectId());
       return ExitCode.OK;

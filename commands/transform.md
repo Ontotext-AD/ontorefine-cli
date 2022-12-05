@@ -19,8 +19,8 @@ options.
 ```bash
 Usage:
 
-ontorefine-cli transform [-hV] [--[no-]clean] [-f <format>] [-o <operations>]
-                         [-q <sparql>] [-r <result>] -u <url> FILE
+ontorefine-cli transform [-hV] [--[no-]clean] [-c <configurations>] [-f
+                         <format>] [-q <sparql>] [-r <result>] -u <url> FILE
 
 Description:
 Transforms given dataset into different data format.
@@ -35,11 +35,14 @@ Options:
                             to, e.g. http://localhost:7333.
   -f, --format <format>   The format of the provided file. The default format
                             is 'csv'. The allowed values are: csv
-  -o, --operations <operations>
-                          A file with the operations that should be applied to
-                            the project. The mapping for the RDFization of the
-                            dataset can be provided as operation. The file
-                            should contain JSON document.
+  -c, --configurations <configurations>
+                          A file with the configurations that should be used
+                            for project creation. Ideally it should contain the
+                            import options and the operations history of the
+                            project, but it is also allowed for one one of the
+                            configurations to be present. The mapping for the
+                            RDFization of the dataset is stored as operation to
+                            the history. The file should contain JSON document.
   -q, --sparql <sparql>   A file containing SPARQL CONSTRUCT query to be used
                             for RDFization of the provided dataset.
   -r, --result <result>   Controls the output format of the result. The default

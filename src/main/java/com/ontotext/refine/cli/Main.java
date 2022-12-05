@@ -1,7 +1,11 @@
 package com.ontotext.refine.cli;
 
+import static com.ontotext.refine.cli.utils.PrintUtils.error;
+
 import com.ontotext.refine.cli.create.CreateProject;
 import com.ontotext.refine.cli.export.rdf.ExportRdf;
+import com.ontotext.refine.cli.extract.ExtractConfigurations;
+import com.ontotext.refine.cli.operations.ApplyOperations;
 import com.ontotext.refine.cli.transform.Transform;
 import picocli.CommandLine;
 
@@ -16,7 +20,7 @@ import picocli.CommandLine;
         CreateProject.class,
         DeleteProject.class,
         Export.class,
-        ExtractOperations.class,
+        ExtractConfigurations.class,
         ApplyOperations.class,
         RegisterReconService.class,
         ExportRdf.class,
@@ -45,7 +49,7 @@ class Main implements Runnable {
       System.exit(cmd.execute(args));
     } else {
       // No arguments, complain and show usage
-      System.err.println("Missing command.");
+      error("Missing command.");
       cmd.usage(System.err);
       System.exit(CommandLine.ExitCode.USAGE);
     }

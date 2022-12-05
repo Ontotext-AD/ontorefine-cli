@@ -1,5 +1,8 @@
 package com.ontotext.refine.cli.transform;
 
+import static com.ontotext.refine.cli.operations.OperationsUtil.getOperations;
+import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration.IMPORT_OPTIONS;
+import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
 import static com.ontotext.refine.cli.utils.ExportUtils.awaitProcessesCompletion;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
 import static com.ontotext.refine.cli.utils.PrintUtils.print;
@@ -17,13 +20,11 @@ import com.ontotext.refine.client.JsonOperation;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
+import com.ontotext.refine.client.command.create.CreateProjectCommand.Builder;
 import com.ontotext.refine.client.command.operations.ApplyOperationsResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.io.IOUtils;
@@ -72,11 +73,13 @@ public class Transform extends Process {
   private InputDataFormat format;
 
   @Option(
-      names = {"-o", "--operations"},
-      description = "A file with the operations that should be applied to the project."
-          + " The mapping for the RDFization of the dataset can be provided as operation."
+      names = {"-c", "--configurations"},
+      description = "A file with the configurations that should be used for project creation."
+          + " Ideally it should contain the import options and the operations history of the"
+          + " project, but it is also allowed for one one of the configurations to be present."
+          + " The mapping for the RDFization of the dataset is stored as operation to the history."
           + " The file should contain JSON document.")
-  private File operations;
+  private File configurations;
 
   @Option(
       names = {"-q", "--sparql"},
@@ -100,18 +103,15 @@ public class Transform extends Process {
           + " the transformation. By default the cleaning is enabled.")
   private boolean clean = true;
 
-  // TODO: We could add argument for the prefix, which will allow usage of a streaming
-  // functionality in the refine. However this will work only when transformation is done
-  // using the SPARQL query
-
   @Override
   public Integer call() throws Exception {
     if (doesNotExists(file, "FILE")) {
       return ExitCode.USAGE;
     }
 
-    if (doesNotExists(sparql) && doesNotExists(operations)) {
-      error("Expected at least one of '--operations' or '--sparql' parameters to be available.");
+    if (doesNotExists(sparql) && doesNotExists(configurations)) {
+      error(
+          "Expected at least one of '--configurations' or '--sparql' parameters to be available.");
       return ExitCode.USAGE;
     }
 
@@ -129,7 +129,7 @@ public class Transform extends Process {
       if (sparql != null) {
         print(export(project, sparql, result, Using.SPARQL, client));
       } else {
-        print(export(project, operations, result, Using.MAPPING, client));
+        print(export(project, configurations, result, Using.MAPPING, client));
       }
 
       return ExitCode.OK;
@@ -147,33 +147,33 @@ public class Transform extends Process {
     return ExitCode.SOFTWARE;
   }
 
-  private String createProject(RefineClient client) throws RefineException {
+  private String createProject(RefineClient client) throws IOException {
     String currentDate = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDate.now());
-    return RefineCommands
-        .createProject()
-        .file(file)
+    Builder command = RefineCommands
+        .createProject().file(file)
         .format(format.toUploadFormat())
         .name(format("cli-transform-%s-%s", file.getName(), currentDate))
-        .token(getToken())
-        .build()
-        .execute(client)
-        .getProjectId();
+        .token(getToken());
+
+    if (configurations != null) {
+      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::asText));
+    }
+
+    return command.build().execute(client).getProjectId();
   }
 
   private boolean applyOperations(String project, RefineClient client) {
     // we should not try to apply the operations, if there aren't any
-    if (doesNotExists(operations)) {
+    if (doesNotExists(configurations)) {
       return true;
     }
 
-    try (InputStream opsIs = new FileInputStream(operations)) {
-      String ops = IOUtils.toString(opsIs, StandardCharsets.UTF_8);
-
+    try {
       ApplyOperationsResponse response = RefineCommands
           .applyOperations()
           .project(project)
           .token(getToken())
-          .operations(JsonOperation.from(ops))
+          .operations(JsonOperation.from(getOperations(configurations)))
           .build()
           .execute(client);
 

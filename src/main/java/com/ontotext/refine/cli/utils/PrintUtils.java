@@ -35,13 +35,23 @@ public class PrintUtils {
   /**
    * Prints an information message in the console.
    *
+   * @param value to be printed
+   * @see System#out
+   */
+  public static void info(Object value) {
+    System.out.println(value);
+  }
+
+  /**
+   * Prints an information message in the console.
+   *
    * @param template for the message
    * @param args to be replaced in the template
    * @see System#out
    * @see String#format(String, Object...)
    */
   public static void info(String template, Object... args) {
-    System.out.println(format(template, args));
+    info(format(template, args));
   }
 
   /**

@@ -11,19 +11,22 @@ applied to the specified project.
 ```bash
 Usage:
 
-ontorefine-cli extract [-hV] -u <url> PROJECT
+ontorefine-cli extract [-hV] [-m <mode>] -u <url> PROJECT
 
 Description:
-Extracts the operations history of a project in JSON format.
+Extracts specific project configuration in JSON format.
 
 Parameters:
-      PROJECT       The project whose operations to extract.
+      PROJECT         The project whose configurations to extract.
 
 Options:
-  -u, --url <url>   The URL of the Ontotext Refine instance to connect to, e.g.
-                      http://localhost:7333.
-  -h, --help        Show this help message and exit.
-  -V, --version     Print version information and exit.
+  -u, --url <url>     The URL of the Ontotext Refine instance to connect to, e.
+                        g. http://localhost:7333.
+  -m, --mode <mode>   Controls which project configuration to be extracted. The
+                        default is 'operations'. The allowed values are:
+                        operations, import-options, full.
+  -h, --help          Show this help message and exit.
+  -V, --version       Print version information and exit.
 ```
 
 ## Examples

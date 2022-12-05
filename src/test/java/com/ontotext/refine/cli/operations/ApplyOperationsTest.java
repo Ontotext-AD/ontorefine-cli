@@ -1,8 +1,9 @@
-package com.ontotext.refine.cli;
+package com.ontotext.refine.cli.operations;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.ontotext.refine.cli.BaseProcessTest;
 import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import com.ontotext.refine.cli.test.support.RefineResponder;
 import com.ontotext.refine.cli.test.support.RefineResponder.HandlerContext;
@@ -17,6 +18,8 @@ import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import picocli.CommandLine.ExitCode;
 
 /**
@@ -83,11 +86,14 @@ class ApplyOperationsTest extends BaseProcessTest {
     }
   }
 
-  @Test
+  @ParameterizedTest
   @ExpectedSystemExit(ExitCode.OK)
-  void shouldPassSuccessfully() {
+  @ValueSource(strings = {
+      "operations.json",
+      "project-configurations-variations/csv-full-configuration.json"})
+  void shouldPassSuccessfully(String file) {
     try {
-      URL resource = getClass().getClassLoader().getResource("operations.json");
+      URL resource = getClass().getClassLoader().getResource(file);
 
       String uriArg = "-u " + responder.getUri();
       commandExecutor().accept(args(resource.getPath(), PROJECT_ID, uriArg));

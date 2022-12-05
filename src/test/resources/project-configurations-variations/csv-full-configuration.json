@@ -1,0 +1,186 @@
+{
+  "importOptions": [
+    {
+      "encoding": "",
+      "separator": ",",
+      "ignoreLines": -1,
+      "headerLines": 1,
+      "skipDataLines": 0,
+      "limit": -1,
+      "storeBlankRows": true,
+      "guessCellValueTypes": false,
+      "processQuotes": true,
+      "quoteCharacter": "\"",
+      "storeBlankCellsAsNulls": true,
+      "includeFileSources": false,
+      "projectName": "Netherlands_restaurants-17.08",
+      "projectTags": [
+        ""
+      ],
+      "fileSource": "Netherlands_restaurants-csv.csv"
+    }
+  ],
+  "operations": [
+    {
+      "op": "core/recon",
+      "engineConfig": {
+        "facets": [],
+        "mode": "row-based"
+      },
+      "columnName": "City",
+      "config": {
+        "mode": "standard-service",
+        "service": "https://wikidata.reconci.link/en/api",
+        "identifierSpace": "http://www.wikidata.org/entity/",
+        "schemaSpace": "http://www.wikidata.org/prop/direct/",
+        "type": {
+          "id": "Q1852859",
+          "name": "populated place in the Netherlands"
+        },
+        "autoMatch": true,
+        "columnDetails": [],
+        "limit": 0
+      },
+      "description": "Reconcile cells in column City to type Q1852859"
+    },
+    {
+      "op": "core/extend-reconciled-data",
+      "engineConfig": {
+        "facets": [],
+        "mode": "row-based"
+      },
+      "baseColumnName": "City",
+      "endpoint": "https://wikidata.reconci.link/en/api",
+      "identifierSpace": "http://www.wikidata.org/entity/",
+      "schemaSpace": "http://www.wikidata.org/prop/direct/",
+      "extension": {
+        "properties": [
+          {
+            "id": "P17",
+            "name": null
+          },
+          {
+            "id": "P625",
+            "name": null
+          },
+          {
+            "id": "P1082",
+            "name": null
+          }
+        ]
+      },
+      "columnInsertIndex": 13,
+      "description": "Extend data at index 13 based on column City"
+    },
+    {
+      "op": "mapping-editor/save-rdf-mapping",
+      "mapping": {
+        "baseIRI": "http://example.com/base/",
+        "namespaces": {},
+        "subjectMappings": [
+          {
+            "subject": {
+              "valueSource": {
+                "source": "constant",
+                "constant": "subject"
+              }
+            },
+            "typeMappings": [],
+            "propertyMappings": [
+              {
+                "property": {
+                  "valueSource": {
+                    "source": "constant",
+                    "constant": "title"
+                  }
+                },
+                "values": [
+                  {
+                    "valueSource": {
+                      "source": "column",
+                      "columnName": "Title"
+                    },
+                    "valueType": {
+                      "type": "literal"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "description": "Save RDF Mapping"
+    },
+    {
+      "op": "mapping-editor/save-rdf-mapping",
+      "mapping": {
+        "baseIRI": "http://example.com/base/",
+        "namespaces": {},
+        "subjectMappings": [
+          {
+            "subject": {
+              "valueSource": {
+                "source": "constant",
+                "constant": "subject"
+              }
+            },
+            "typeMappings": [],
+            "propertyMappings": [
+              {
+                "property": {
+                  "valueSource": {
+                    "source": "constant",
+                    "constant": "title"
+                  }
+                },
+                "values": [
+                  {
+                    "valueSource": {
+                      "source": "column",
+                      "columnName": "Title"
+                    },
+                    "valueType": {
+                      "type": "literal"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "subject": {
+              "valueSource": {
+                "source": "constant",
+                "constant": "subject"
+              }
+            },
+            "typeMappings": [],
+            "propertyMappings": [
+              {
+                "property": {
+                  "valueSource": {
+                    "source": "constant",
+                    "constant": "population"
+                  }
+                },
+                "values": [
+                  {
+                    "valueSource": {
+                      "source": "column",
+                      "columnName": "population"
+                    },
+                    "valueType": {
+                      "type": "literal"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "description": "Save RDF Mapping"
+    }
+  ]
+}

@@ -1,7 +1,12 @@
 package com.ontotext.refine.cli.utils;
 
+import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
+
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.ontotext.refine.cli.export.rdf.RdfResultFormats;
+import com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser;
+import com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration;
 import com.ontotext.refine.client.RefineClient;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.models.GetProjectModelsResponse;
@@ -93,8 +98,15 @@ public class RdfExportUtils {
   }
 
   private static String getRdfMapping(File mappingFile, String project, RefineClient client)
-      throws RefineException {
+      throws IOException {
     if (mappingFile != null) {
+      JsonNode json = JsonUtils.toJson(mappingFile);
+      if (ProjectConfigurationsParser.isProjectConfiguration(json)) {
+        return get(json, Configuration.OPERATIONS)
+            .orElseGet(JsonNodeFactory.instance::objectNode)
+            .toString();
+      }
+
       return readFile(mappingFile);
     }
 

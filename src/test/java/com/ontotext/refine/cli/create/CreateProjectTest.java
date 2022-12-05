@@ -15,6 +15,7 @@ import org.apache.http.HttpStatus;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
@@ -109,12 +110,35 @@ class CreateProjectTest extends BaseProcessTest {
 
   @Test
   @ExpectedSystemExit(ExitCode.OK)
-  void shouldPassSuccessfully() {
+  void shouldPassSuccessfully_csv() {
     try {
       URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");
 
       String uriArg = "-u " + responder.getUri();
       commandExecutor().accept(args(resource.getPath(), "-n Restaurants", "-f csv", uriArg));
+    } finally {
+      String errors = consoleErrors();
+      assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
+
+      assertEquals(
+          "Successfully created project with identifier: 1812661014997",
+          consoleOutput().trim());
+    }
+  }
+
+  @Disabled("Not yet introduced.")
+  @Test
+  @ExpectedSystemExit(ExitCode.OK)
+  void shouldPassSuccessfully_xml() {
+    try {
+      URL resource = getClass().getClassLoader().getResource("test-example.xml");
+      URL importOptsJson =
+          getClass().getClassLoader().getResource("xml-project-configurations.json");
+
+      String uriArg = "-u " + responder.getUri();
+      String importOptsArg = "-c " + importOptsJson.getPath();
+      commandExecutor()
+          .accept(args(resource.getPath(), "-n test-xml", "-f xml", importOptsArg, uriArg));
     } finally {
       String errors = consoleErrors();
       assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);

@@ -10,7 +10,8 @@ The project identifier is returned as a response from the command.
 ```bash
 Usage:
 
-ontorefine-cli create [-hV] [-f <format>] [-n <name>] -u <url> FILE
+ontorefine-cli create [-hV] [-c <configurations>] [-f <format>] [-n <name>] -u
+                      <url> FILE
 
 Description:
 Creates a new project from a file.
@@ -27,6 +28,12 @@ Options:
                             file name will be used.
   -f, --format <format>   The format of the provided file. The default format
                             is 'csv'. The allowed values are: csv
+  -c, --configurations <configurations>
+                          File containing configurations for the importing
+                            process of the dataset. It includes information how
+                            to parse the input data so that it can be
+                            represented in tabular form and additioanl options
+                            related to the project creation.
   -h, --help              Show this help message and exit.
   -V, --version           Print version information and exit.
 ```

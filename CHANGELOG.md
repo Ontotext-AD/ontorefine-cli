@@ -9,6 +9,10 @@
    The argument is called `--configurations` and it accepts path to file, containing the JSON with import options.
  - Introduced few new utility class related to the processing of the project configurations for the different commands.
  - Added few new test resources, primary related to the new functionality for the project configurations.
+ - Enhanced the command for project creation to allow assigning of aliases. Now the command has additional optional argument called `--aliases`, which accept
+   multiple comma separated values.
+   When the argument is provided the command will use additional operation to assign the aliases. If there is an error during that process, the created project
+   will be deleted. This is done in order to simulate transactional behavior, because the aliases are unique values in the context of all projects. 
 
 ### Changes
 

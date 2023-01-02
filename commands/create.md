@@ -11,7 +11,7 @@ The project identifier is returned as a response from the command.
 Usage:
 
 ontorefine-cli create [-hV] [-c <configurations>] [-f <format>] [-n <name>] -u
-                      <url> FILE
+                      <url> [-a <aliases>[,<aliases>...]]... FILE
 
 Description:
 Creates a new project from a file.
@@ -34,6 +34,9 @@ Options:
                             to parse the input data so that it can be
                             represented in tabular form and additioanl options
                             related to the project creation.
+  -a, --aliases <aliases>[,<aliases>...]
+                          Aliases for the project. The argument accepts
+                            multiple comma separated values.
   -h, --help              Show this help message and exit.
   -V, --version           Print version information and exit.
 ```

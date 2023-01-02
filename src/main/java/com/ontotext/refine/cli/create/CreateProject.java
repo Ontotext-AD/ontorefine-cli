@@ -8,11 +8,16 @@ import static com.ontotext.refine.cli.utils.PrintUtils.info;
 import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.RefineClient;
+import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.create.CreateProjectCommand.Builder;
 import com.ontotext.refine.client.command.create.CreateProjectResponse;
+import com.ontotext.refine.client.command.project.aliases.UpdateProjectAliasesResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
+import java.io.IOException;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
@@ -65,32 +70,89 @@ public class CreateProject extends Process {
           + " in tabular form and additioanl options related to the project creation.")
   private File configurations;
 
+  @Option(
+      names = {"-a", "--aliases"},
+      description = "Aliases for the project. The argument accepts multiple comma separated"
+          + " values.",
+      split = ",|, ",
+      splitSynopsisLabel = ",")
+  private String[] aliases;
+
   @Override
   public Integer call() throws Exception {
     if (FileValidator.doesNotExists(file, "FILE")) {
       return ExitCode.USAGE;
     }
 
-    try (RefineClient client = getClient()) {
+    String projectId = null;
+    RefineClient client = getClient();
+    try {
+      CreateProjectResponse response = createProject(client);
 
-      Builder command = RefineCommands
-          .createProject()
-          .file(file)
-          .format(format.toUploadFormat())
-          .name(StringUtils.defaultIfBlank(name, file.getName()))
-          .token(getToken());
+      projectId = response.getProjectId();
 
-      if (configurations != null) {
-        get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::asText));
+      boolean hasAssignedAliases = assignAliases(projectId, client);
+
+      info("Successfully created project with identifier: %s", projectId);
+
+      if (hasAssignedAliases) {
+        info("and aliases: %s", String.join(",", aliases));
       }
 
-      CreateProjectResponse response = command.build().execute(client);
-
-      info("Successfully created project with identifier: %s", response.getProjectId());
       return ExitCode.OK;
     } catch (RefineException re) {
-      error(re.getMessage());
+      handleError(projectId, client, re.getMessage());
+    } finally {
+      IOUtils.closeQuietly(client);
     }
     return ExitCode.SOFTWARE;
+  }
+
+
+  private CreateProjectResponse createProject(RefineClient client) throws IOException {
+    Builder command = RefineCommands
+        .createProject()
+        .file(file)
+        .format(format.toUploadFormat())
+        .name(StringUtils.defaultIfBlank(name, file.getName()))
+        .token(getToken());
+
+    if (configurations != null) {
+      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::asText));
+    }
+
+    return command.build().execute(client);
+  }
+
+
+  private boolean assignAliases(String projectId, RefineClient client) throws RefineException {
+    if (ArrayUtils.isEmpty(aliases)) {
+      return false;
+    }
+
+    UpdateProjectAliasesResponse aliasesResponse = RefineCommands
+        .updateProjectAliases()
+        .setProject(projectId)
+        .setAdd(aliases)
+        .build()
+        .execute(client);
+
+    if (ResponseCode.ERROR.equals(aliasesResponse.getCode())) {
+      throw new RefineException(aliasesResponse.getMessage());
+    }
+
+    return true;
+  }
+
+  private void handleError(String projectId, RefineClient client, String message)
+      throws RefineException {
+
+    // in order to simulate some kind of weird transaction,
+    // if there is an error after the point of project creation, we need to clean it up
+    if (projectId != null) {
+      RefineCommands.deleteProject().project(projectId).token(getToken()).build().execute(client);
+    }
+
+    error(message);
   }
 }

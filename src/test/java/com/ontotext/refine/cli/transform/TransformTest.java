@@ -171,8 +171,9 @@ class TransformTest extends BaseProcessTest {
 
       String uriArg = "-u " + responder.getUri();
       String sparqlArg = "-q " + sparql.getPath();
+      String aliasesArg = "-a test-alias";
 
-      commandExecutor().accept(args(dataset.getPath(), sparqlArg, uriArg));
+      commandExecutor().accept(args(dataset.getPath(), sparqlArg, aliasesArg, uriArg));
     } finally {
       String errors = consoleErrors();
       assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
@@ -183,16 +184,20 @@ class TransformTest extends BaseProcessTest {
 
   // TODO: prepare TC and remove all of this
   private static Map<String, HttpRequestHandler> mockResponses() {
-    Map<String, HttpRequestHandler> responses = new HashMap<>(7);
+    Map<String, HttpRequestHandler> responses = new HashMap<>(8);
     HandlerContext context = new HandlerContext().setFailCsrfRequest(() -> failCsrfRequest);
     responses.put("/orefine/command/core/get-csrf-token", csrfToken(context));
-    responses.put("/orefine/command/core/create-project-from-upload",
+    responses.put(
+        "/orefine/command/core/create-project-from-upload",
         createProjectHandler(PROJECT_ID));
     responses.put("/orefine/command/core/apply-operations", applyOperations());
     responses.put("/rest/rdf-mapper/rdf/ontorefine:" + PROJECT_ID, exportHandler());
     responses.put("/orefine/command/core/get-processes", noProcesses());
     responses.put("/repositories/ontorefine:" + PROJECT_ID, exportHandler());
     responses.put("/orefine/command/core/delete-project", deleteProjectHandler());
+    responses.put(
+        "/project-aliases",
+        (request, response, ctx) -> response.setStatusCode(HttpStatus.SC_OK));
     return responses;
   }
 

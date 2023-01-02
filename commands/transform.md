@@ -20,7 +20,8 @@ options.
 Usage:
 
 ontorefine-cli transform [-hV] [--[no-]clean] [-c <configurations>] [-f
-                         <format>] [-q <sparql>] [-r <result>] -u <url> FILE
+                         <format>] [-q <sparql>] [-r <result>] -u <url> [-a
+                         <aliases>[,<aliases>...]]... FILE
 
 Description:
 Transforms given dataset into different data format.
@@ -49,6 +50,9 @@ Options:
                             format is 'turtle'. The allowed values are: rdfxml,
                             ntriples, turtle, turtlestar, trix, trig, trigstar,
                             binary, nquads, jsonld, rdfjson
+  -a, --aliases <aliases>[,<aliases>...]
+                          Aliases for the project. The argument accepts
+                            multiple comma separated values.
       --[no-]clean        Controls the cleaning of the project after the
                             operation execution. When enabled the clean up will
                             be executed regardless of the success of the

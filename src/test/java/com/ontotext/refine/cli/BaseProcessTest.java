@@ -116,9 +116,11 @@ public abstract class BaseProcessTest {
    * @return the first line of the console error output
    */
   protected String assertMissingArgError() {
+    String[] terms = {"options", "option", "parameters", "parameter", "arguments", "argument"};
+
     String firstLine = consoleErrors().split(System.lineSeparator())[0];
-    boolean condition = firstLine.contains("Missing required")
-        && StringUtils.containsAny(firstLine, "options", "option", "parameters", "parameter");
+    boolean condition =
+        firstLine.contains("Missing required") && StringUtils.containsAny(firstLine, terms);
     assertTrue(condition, "Expected to find missing arg line but it was <" + firstLine + ">");
     return firstLine;
   }

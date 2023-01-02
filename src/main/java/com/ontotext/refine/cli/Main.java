@@ -6,6 +6,7 @@ import com.ontotext.refine.cli.create.CreateProject;
 import com.ontotext.refine.cli.export.rdf.ExportRdf;
 import com.ontotext.refine.cli.extract.ExtractConfigurations;
 import com.ontotext.refine.cli.operations.ApplyOperations;
+import com.ontotext.refine.cli.project.aliases.UpdateAliases;
 import com.ontotext.refine.cli.transform.Transform;
 import picocli.CommandLine;
 
@@ -26,6 +27,7 @@ import picocli.CommandLine;
         ExportRdf.class,
         Transform.class,
         RetrieveVersion.class,
+        UpdateAliases.class,
         CommandLine.HelpCommand.class},
     mixinStandardHelpOptions = true,
     separator = " ",

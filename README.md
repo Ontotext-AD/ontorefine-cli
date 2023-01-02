@@ -43,6 +43,7 @@ some of the future releases.
     rdf               Exports the data of a project to RDF format.
     transform         Transforms given dataset into different data format.
     refine-version    Retrieves the version of the Ontotext Refine instance.
+    update-aliases    Updates project aliases. The command can add and remove values in a single invocation.
     help              Displays help information about the specified command.
 
 More details about the individual commands can be seen in the documents in [commands](commands) directory.

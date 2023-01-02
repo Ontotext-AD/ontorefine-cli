@@ -7,11 +7,13 @@ import com.ontotext.refine.cli.BaseProcessTest;
 import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import com.ontotext.refine.cli.test.support.RefineResponder;
 import com.ontotext.refine.cli.test.support.RefineResponder.HandlerContext;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.HttpStatus;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -28,10 +30,12 @@ class CreateProjectTest extends BaseProcessTest {
 
   private static RefineResponder responder = new RefineResponder();
   private static boolean failCsrfRequest;
+  private static boolean failAliasesAssignment;
 
   @BeforeAll
   static void beforeAll() throws IOException {
     failCsrfRequest = false;
+    failAliasesAssignment = false;
     responder.start(mockResponses());
   }
 
@@ -126,6 +130,48 @@ class CreateProjectTest extends BaseProcessTest {
     }
   }
 
+  @Test
+  @ExpectedSystemExit(ExitCode.OK)
+  void shouldPassSuccessfully_csvWithAliases() {
+    try {
+      URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");
+
+      String uriArg = "-u " + responder.getUri();
+      String nameArg = "-n Restaurants";
+      String aliasesArg = "-a test-alias, other-test-alias, another-test-alias";
+      commandExecutor()
+          .accept(args(resource.getPath(), nameArg, "-f csv", aliasesArg, uriArg));
+    } finally {
+      String errors = consoleErrors();
+      assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
+
+      assertEquals(
+          "Successfully created project with identifier: 1812661014997" + System.lineSeparator()
+              + "and aliases: test-alias, other-test-alias, another-test-alias",
+          consoleOutput().trim());
+    }
+  }
+
+  @Test
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
+  void shouldFail_aliasAssignment() {
+    try {
+      failAliasesAssignment = true;
+      URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");
+
+      String uriArg = "-u " + responder.getUri();
+      String nameArg = "-n Restaurants";
+      String aliasesArg = "-a test-alias";
+      commandExecutor().accept(args(resource.getPath(), nameArg, "-f csv", aliasesArg, uriArg));
+    } finally {
+      failAliasesAssignment = false;
+
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals("Internal Server Error", lastLine);
+    }
+  }
+
   @Disabled("Not yet introduced.")
   @Test
   @ExpectedSystemExit(ExitCode.OK)
@@ -150,17 +196,33 @@ class CreateProjectTest extends BaseProcessTest {
   }
 
   private static Map<String, HttpRequestHandler> mockResponses() {
-    Map<String, HttpRequestHandler> responses = new HashMap<>(2);
+    Map<String, HttpRequestHandler> responses = new HashMap<>(4);
     HandlerContext context = new HandlerContext().setFailCsrfRequest(() -> failCsrfRequest);
     responses.put("/orefine/command/core/get-csrf-token", RefineResponder.csrfToken(context));
     responses.put("/orefine/command/core/create-project-from-upload", createProjectHandler());
+    responses.put("/project-aliases", assignAliasesHandler());
+    responses.put("/orefine/command/core/delete-project", deleteProjectHandler());
     return responses;
   }
 
   private static HttpRequestHandler createProjectHandler() {
+    return (request, response, context) -> {
+      response.setStatusCode(HttpStatus.SC_MOVED_TEMPORARILY);
+      response.addHeader("Location", "?projectId=" + PROJECT_ID);
+    };
+  }
+
+  private static HttpRequestHandler assignAliasesHandler() {
+    return (request, response, context) -> response.setStatusCode(
+        failAliasesAssignment ? HttpStatus.SC_INTERNAL_SERVER_ERROR : HttpStatus.SC_OK);
+  }
+
+  private static HttpRequestHandler deleteProjectHandler() {
     return (httpRequest, httpResponse, httpContext) -> {
-      httpResponse.setStatusCode(HttpStatus.SC_MOVED_TEMPORARILY);
-      httpResponse.addHeader("Location", "?projectId=" + PROJECT_ID);
+      httpResponse.setStatusCode(HttpStatus.SC_OK);
+      BasicHttpEntity entity = new BasicHttpEntity();
+      entity.setContent(new ByteArrayInputStream("{ \"code\" : \"ok\" }".getBytes()));
+      httpResponse.setEntity(entity);
     };
   }
 }

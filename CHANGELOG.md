@@ -16,6 +16,8 @@
  - Enhanced the `transform` command, allowing it to take advantage of the project aliases functionality. Now the command has additional argument for project aliases
    assignment.
    By enabling this functionality, now the users can make SPARQL transformation queries using project alias, instead of project placeholder, in the SERVICE clause.
+ - Introduced new command for updating the aliases of existing projects. The command is useful for project were created before the introduction of the aliases
+   functionality.
 
 ### Changes
 

@@ -22,12 +22,14 @@ import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.create.CreateProjectCommand.Builder;
 import com.ontotext.refine.client.command.operations.ApplyOperationsResponse;
+import com.ontotext.refine.client.command.project.aliases.UpdateProjectAliasesResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
 import picocli.CommandLine.Option;
@@ -96,6 +98,14 @@ public class Transform extends Process {
   private RdfResultFormats result;
 
   @Option(
+      names = {"-a", "--aliases"},
+      description = "Aliases for the project. The argument accepts multiple comma separated"
+          + " values.",
+      split = ",|, ",
+      splitSynopsisLabel = ",")
+  private String[] aliases;
+
+  @Option(
       names = "--no-clean",
       negatable = true,
       description = "Controls the cleaning of the project after the operation execution."
@@ -119,6 +129,8 @@ public class Transform extends Process {
     RefineClient client = getClient();
     try {
       project = createProject(client);
+
+      assignAliases(project, client);
 
       if (!applyOperations(project, client)) {
         return ExitCode.SOFTWARE;
@@ -160,6 +172,23 @@ public class Transform extends Process {
     }
 
     return command.build().execute(client).getProjectId();
+  }
+
+  private void assignAliases(String project, RefineClient client) throws RefineException {
+    if (ArrayUtils.isEmpty(aliases)) {
+      return;
+    }
+
+    UpdateProjectAliasesResponse aliasesResponse = RefineCommands
+        .updateProjectAliases()
+        .setProject(project)
+        .setAdd(aliases)
+        .build()
+        .execute(client);
+
+    if (ResponseCode.ERROR.equals(aliasesResponse.getCode())) {
+      throw new RefineException(aliasesResponse.getMessage());
+    }
   }
 
   private boolean applyOperations(String project, RefineClient client) {

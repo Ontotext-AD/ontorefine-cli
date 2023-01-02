@@ -12,7 +12,10 @@
  - Enhanced the command for project creation to allow assigning of aliases. Now the command has additional optional argument called `--aliases`, which accept
    multiple comma separated values.
    When the argument is provided the command will use additional operation to assign the aliases. If there is an error during that process, the created project
-   will be deleted. This is done in order to simulate transactional behavior, because the aliases are unique values in the context of all projects. 
+   will be deleted. This is done in order to simulate transactional behavior, because the aliases are unique values in the context of all projects.
+ - Enhanced the `transform` command, allowing it to take advantage of the project aliases functionality. Now the command has additional argument for project aliases
+   assignment.
+   By enabling this functionality, now the users can make SPARQL transformation queries using project alias, instead of project placeholder, in the SERVICE clause.
 
 ### Changes
 

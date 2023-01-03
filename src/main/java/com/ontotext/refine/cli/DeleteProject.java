@@ -41,7 +41,7 @@ class DeleteProject extends Process {
     try (RefineClient client = getClient()) {
 
       DeleteProjectResponse response = RefineCommands.deleteProject()
-          .project(project)
+          .project(resolveProject(project))
           .token(getToken())
           .build()
           .execute(client);

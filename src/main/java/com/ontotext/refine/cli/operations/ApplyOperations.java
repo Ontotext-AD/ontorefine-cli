@@ -60,7 +60,7 @@ public class ApplyOperations extends Process {
 
       ApplyOperationsResponse response = RefineCommands
           .applyOperations()
-          .project(project)
+          .project(resolveProject(project))
           .token(getToken())
           .operations(JsonOperation.from(getOperations(operations)))
           .build()

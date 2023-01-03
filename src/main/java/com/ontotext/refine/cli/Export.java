@@ -60,7 +60,7 @@ class Export extends Process {
 
       ExportRowsResponse response = RefineCommands
           .exportRows()
-          .setProject(project)
+          .setProject(resolveProject(project))
           .setFormat(format)
           .setEngine(Engines.ROW_BASED)
           .setToken(getToken())

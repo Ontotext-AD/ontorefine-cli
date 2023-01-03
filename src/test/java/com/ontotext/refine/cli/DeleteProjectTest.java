@@ -98,9 +98,12 @@ class DeleteProjectTest extends BaseProcessTest {
     try {
       commandExecutor().accept(args(PROJECT_ID, "-u " + responder.getUri()));
     } finally {
+      String[] log = consoleOutput().split(System.lineSeparator());
+      String lastLine = log[log.length - 1];
+
       assertEquals(
           "Successfully deleted project with identifier: 1812661014997",
-          consoleOutput().trim());
+          lastLine);
     }
   }
 

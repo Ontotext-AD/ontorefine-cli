@@ -52,7 +52,8 @@ public class ExtractConfigurations extends Process {
   public Integer call() throws Exception {
     try (RefineClient client = getClient()) {
 
-      info(getConfiguration(client));
+      String projectId = resolveProject(project);
+      info(getConfiguration(projectId, client));
 
       return ExitCode.OK;
     } catch (RefineException re) {
@@ -61,38 +62,40 @@ public class ExtractConfigurations extends Process {
     return ExitCode.SOFTWARE;
   }
 
-  private JsonNode getConfiguration(RefineClient client) throws RefineException {
+  private JsonNode getConfiguration(String projectId, RefineClient client) throws RefineException {
     switch (mode) {
       case IMPORT_OPTIONS:
-        return getImportOptions(client);
+        return getImportOptions(projectId, client);
       case FULL:
-        return getProjectConfigurations(client).getContent();
+        return getProjectConfigurations(projectId, client).getContent();
       case OPERATIONS:
       default:
-        return getOperationsHistory(client).getContent();
+        return getOperationsHistory(projectId, client).getContent();
     }
   }
 
-  private JsonNode getImportOptions(RefineClient client) throws RefineException {
-    return getProjectConfigurations(client)
+  private JsonNode getImportOptions(String projectId, RefineClient client) throws RefineException {
+    return getProjectConfigurations(projectId, client)
         .getImportOptions()
         .orElseThrow(() -> new RefineException(
             "Failed to load the import options for project: %s", project));
   }
 
-  private GetProjectConfigurationsResponse getProjectConfigurations(RefineClient client)
+  private GetProjectConfigurationsResponse getProjectConfigurations(
+      String projectId, RefineClient client)
       throws RefineException {
     return RefineCommands
         .getProjectConfigurations()
-        .setProject(project)
+        .setProject(projectId)
         .build()
         .execute(client);
   }
 
-  private GetOperationsResponse getOperationsHistory(RefineClient client) throws RefineException {
+  private GetOperationsResponse getOperationsHistory(String projectId, RefineClient client)
+      throws RefineException {
     return RefineCommands
         .getOperations()
-        .setProject(project)
+        .setProject(projectId)
         .build()
         .execute(client);
   }

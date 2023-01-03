@@ -64,14 +64,16 @@ public class ExportRdf extends Process {
   public Integer call() {
     try (RefineClient client = getClient()) {
 
+      String projectId = resolveProject(project);
+
       // wait for any unfinished process
       // TODO: flag this to give the user option to skip it
-      awaitProcessesCompletion(project, client);
+      awaitProcessesCompletion(projectId, client);
 
       if (sparql != null) {
-        print(export(project, sparql, format, Using.SPARQL, client));
+        print(export(projectId, sparql, format, Using.SPARQL, client));
       } else {
-        print(export(project, mapping, format, Using.MAPPING, client));
+        print(export(projectId, mapping, format, Using.MAPPING, client));
       }
 
       return ExitCode.OK;

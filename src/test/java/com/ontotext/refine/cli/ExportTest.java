@@ -106,7 +106,9 @@ class ExportTest extends BaseProcessTest {
       String errors = consoleErrors();
       assertTrue(errors.isEmpty(), "Expected no errors but there were: " + errors);
 
-      assertEquals("CSV-content", consoleOutput().trim());
+      String[] log = consoleOutput().split(System.lineSeparator());
+      String lastLine = log[log.length - 1];
+      assertEquals("CSV-content", lastLine);
     }
   }
 

@@ -18,6 +18,8 @@
    By enabling this functionality, now the users can make SPARQL transformation queries using project alias, instead of project placeholder, in the SERVICE clause.
  - Introduced new command for updating the aliases of existing projects. The command is useful for project were created before the introduction of the aliases
    functionality.
+ - Enhanced all command with additional logic that allows the usage of project aliases, when referring to a project. Now the commands will accept alias or project
+   identifier for the `project` arguments. The provided value will be used to resolve the actual identifier of the project and use it for the commands.
 
 ### Changes
 

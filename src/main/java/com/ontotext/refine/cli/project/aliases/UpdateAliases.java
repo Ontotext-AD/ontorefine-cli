@@ -68,7 +68,8 @@ public class UpdateAliases extends Process {
 
       UpdateProjectAliasesResponse response = RefineCommands
           .updateProjectAliases()
-          .setProject(project)
+          .setProject(
+              resolveProject(project))
           .setAdd(add)
           .setRemove(remove)
           .build()

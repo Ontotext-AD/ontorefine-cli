@@ -3,6 +3,8 @@ package com.ontotext.refine.cli.project.aliases;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ontotext.refine.cli.BaseProcessTest;
 import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import com.ontotext.refine.cli.test.support.RefineResponder;
@@ -10,6 +12,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.HttpStatus;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -100,7 +104,7 @@ class UpdateAliasesTest extends BaseProcessTest {
 
       String error = consoleErrors().split(System.lineSeparator())[0];
       assertEquals(
-          "Failed to update aliases of project '1812661014997' due to: Internal Server Error",
+          "Failed to update aliases of project '1812661014997' due to: Test error",
           error);
     }
   }
@@ -135,7 +139,14 @@ class UpdateAliasesTest extends BaseProcessTest {
         throw new IOException();
       }
 
-      int code = shouldRespondWithError ? HttpStatus.SC_INTERNAL_SERVER_ERROR : HttpStatus.SC_OK;
+      int code = HttpStatus.SC_OK;
+      if (shouldRespondWithError) {
+        code = HttpStatus.SC_INTERNAL_SERVER_ERROR;
+
+        ObjectNode errorJson = JsonNodeFactory.instance.objectNode().put("message", "Test error");
+        response.setEntity(new StringEntity(errorJson.toString(), ContentType.APPLICATION_JSON));
+      }
+
       response.setStatusCode(code);
     };
   }

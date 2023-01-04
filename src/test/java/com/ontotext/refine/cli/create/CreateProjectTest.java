@@ -3,6 +3,8 @@ package com.ontotext.refine.cli.create;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.ontotext.refine.cli.BaseProcessTest;
 import com.ontotext.refine.cli.test.support.ExpectedSystemExit;
 import com.ontotext.refine.cli.test.support.RefineResponder;
@@ -14,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 import org.apache.http.HttpStatus;
 import org.apache.http.entity.BasicHttpEntity;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -168,7 +172,7 @@ class CreateProjectTest extends BaseProcessTest {
 
       String[] errorsArray = consoleErrors().split(System.lineSeparator());
       String lastLine = errorsArray[errorsArray.length - 1];
-      assertEquals("Internal Server Error", lastLine);
+      assertEquals("Test error", lastLine);
     }
   }
 
@@ -213,8 +217,18 @@ class CreateProjectTest extends BaseProcessTest {
   }
 
   private static HttpRequestHandler assignAliasesHandler() {
-    return (request, response, context) -> response.setStatusCode(
-        failAliasesAssignment ? HttpStatus.SC_INTERNAL_SERVER_ERROR : HttpStatus.SC_OK);
+    return (request, response, context) -> {
+      int code = HttpStatus.SC_OK;
+
+      if (failAliasesAssignment) {
+        code = HttpStatus.SC_INTERNAL_SERVER_ERROR;
+
+        ObjectNode errorJson = JsonNodeFactory.instance.objectNode().put("message", "Test error");
+        response.setEntity(new StringEntity(errorJson.toString(), ContentType.APPLICATION_JSON));
+      }
+
+      response.setStatusCode(code);
+    };
   }
 
   private static HttpRequestHandler deleteProjectHandler() {

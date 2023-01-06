@@ -142,7 +142,7 @@ class CreateProjectTest extends BaseProcessTest {
 
       String uriArg = "-u " + responder.getUri();
       String nameArg = "-n Restaurants";
-      String aliasesArg = "-a test-alias, other-test-alias, another-test-alias";
+      String aliasesArg = "-a test_alias, other_test_alias, test_alias_one";
       commandExecutor()
           .accept(args(resource.getPath(), nameArg, "-f csv", aliasesArg, uriArg));
     } finally {
@@ -151,7 +151,7 @@ class CreateProjectTest extends BaseProcessTest {
 
       assertEquals(
           "Successfully created project with identifier: 1812661014997" + System.lineSeparator()
-              + "and aliases: test-alias, other-test-alias, another-test-alias",
+              + "and aliases: test_alias, other_test_alias, test_alias_one",
           consoleOutput().trim());
     }
   }
@@ -165,7 +165,7 @@ class CreateProjectTest extends BaseProcessTest {
 
       String uriArg = "-u " + responder.getUri();
       String nameArg = "-n Restaurants";
-      String aliasesArg = "-a test-alias";
+      String aliasesArg = "-a test_alias";
       commandExecutor().accept(args(resource.getPath(), nameArg, "-f csv", aliasesArg, uriArg));
     } finally {
       failAliasesAssignment = false;

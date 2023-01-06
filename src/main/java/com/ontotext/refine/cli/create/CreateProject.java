@@ -1,5 +1,7 @@
 package com.ontotext.refine.cli.create;
 
+import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.assignAliases;
+import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.extractAliases;
 import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration.IMPORT_OPTIONS;
 import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
@@ -8,16 +10,13 @@ import static com.ontotext.refine.cli.utils.PrintUtils.info;
 import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.validation.FileValidator;
 import com.ontotext.refine.client.RefineClient;
-import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.create.CreateProjectCommand.Builder;
 import com.ontotext.refine.client.command.create.CreateProjectResponse;
-import com.ontotext.refine.client.command.project.aliases.UpdateProjectAliasesResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.io.IOException;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.ExitCode;
@@ -91,7 +90,8 @@ public class CreateProject extends Process {
 
       projectId = response.getProjectId();
 
-      boolean hasAssignedAliases = assignAliases(projectId, client);
+      boolean hasAssignedAliases =
+          assignAliases(projectId, extractAliases(aliases, configurations), client);
 
       info("Successfully created project with identifier: %s", projectId);
 
@@ -118,30 +118,10 @@ public class CreateProject extends Process {
         .token(getToken());
 
     if (configurations != null) {
-      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::asText));
+      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::toString));
     }
 
     return command.build().execute(client);
-  }
-
-
-  private boolean assignAliases(String projectId, RefineClient client) throws RefineException {
-    if (ArrayUtils.isEmpty(aliases)) {
-      return false;
-    }
-
-    UpdateProjectAliasesResponse aliasesResponse = RefineCommands
-        .updateProjectAliases()
-        .setProject(projectId)
-        .setAdd(aliases)
-        .build()
-        .execute(client);
-
-    if (ResponseCode.ERROR.equals(aliasesResponse.getCode())) {
-      throw new RefineException(aliasesResponse.getMessage());
-    }
-
-    return true;
   }
 
   private void handleError(String projectId, RefineClient client, String message)

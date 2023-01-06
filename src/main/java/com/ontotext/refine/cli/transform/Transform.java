@@ -1,10 +1,13 @@
 package com.ontotext.refine.cli.transform;
 
 import static com.ontotext.refine.cli.operations.OperationsUtil.getOperations;
+import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.assignAliases;
+import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.extractAliases;
 import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration.IMPORT_OPTIONS;
 import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
 import static com.ontotext.refine.cli.utils.ExportUtils.awaitProcessesCompletion;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
+import static com.ontotext.refine.cli.utils.PrintUtils.info;
 import static com.ontotext.refine.cli.utils.PrintUtils.print;
 import static com.ontotext.refine.cli.utils.RdfExportUtils.export;
 import static com.ontotext.refine.cli.validation.FileValidator.doesNotExists;
@@ -22,7 +25,6 @@ import com.ontotext.refine.client.ResponseCode;
 import com.ontotext.refine.client.command.RefineCommands;
 import com.ontotext.refine.client.command.create.CreateProjectCommand.Builder;
 import com.ontotext.refine.client.command.operations.ApplyOperationsResponse;
-import com.ontotext.refine.client.command.project.aliases.UpdateProjectAliasesResponse;
 import com.ontotext.refine.client.exceptions.RefineException;
 import java.io.File;
 import java.io.IOException;
@@ -130,7 +132,7 @@ public class Transform extends Process {
     try {
       project = createProject(client);
 
-      assignAliases(project, client);
+      assignAliasesIfAny(project, client);
 
       if (!applyOperations(project, client)) {
         return ExitCode.SOFTWARE;
@@ -168,26 +170,23 @@ public class Transform extends Process {
         .token(getToken());
 
     if (configurations != null) {
-      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::asText));
+      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::toString));
     }
 
     return command.build().execute(client).getProjectId();
   }
 
-  private void assignAliases(String project, RefineClient client) throws RefineException {
-    if (ArrayUtils.isEmpty(aliases)) {
+  private void assignAliasesIfAny(String project, RefineClient client) throws IOException {
+    String[] extractedAliases = extractAliases(aliases, configurations);
+    if (ArrayUtils.isEmpty(extractedAliases)) {
       return;
     }
 
-    UpdateProjectAliasesResponse aliasesResponse = RefineCommands
-        .updateProjectAliases()
-        .setProject(project)
-        .setAdd(aliases)
-        .build()
-        .execute(client);
-
-    if (ResponseCode.ERROR.equals(aliasesResponse.getCode())) {
-      throw new RefineException(aliasesResponse.getMessage());
+    if (!assignAliases(project, extractedAliases, client)) {
+      info(
+          "WARNING! Failed to assign the provided aliases: %s to the project: %s",
+          extractedAliases,
+          project);
     }
   }
 

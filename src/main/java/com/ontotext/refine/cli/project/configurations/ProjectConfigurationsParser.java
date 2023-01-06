@@ -77,7 +77,12 @@ public class ProjectConfigurationsParser {
     /**
      * Operations history configuration.
      */
-    OPERATIONS("operations");
+    OPERATIONS("operations"),
+
+    /**
+     * Project aliases.
+     */
+    ALIASES("aliases");
 
     private final String value;
 
@@ -108,6 +113,10 @@ public class ProjectConfigurationsParser {
 
       if (Configuration.OPERATIONS.equals(configuration)) {
         return detectOperations(json);
+      }
+
+      if (Configuration.ALIASES.equals(configuration)) {
+        return Optional.ofNullable(json.get(Configuration.ALIASES.toString()));
       }
 
       return Optional.empty();

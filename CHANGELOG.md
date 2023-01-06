@@ -20,6 +20,10 @@
    functionality.
  - Enhanced all command with additional logic that allows the usage of project aliases, when referring to a project. Now the commands will accept alias or project
    identifier for the `project` arguments. The provided value will be used to resolve the actual identifier of the project and use it for the commands.
+ - Added logic for extraction of project aliases from the provided configuration file. This logic is primary used when a project is created and it allows the user
+   to provide the aliases into the project configurations. Currently this logic is added in the utility file and used in `create` and `transform` commands.
+   When the aliases are passed as configurations and the user provides an `--aliases` argument values, the information from the both places is merged and then used
+   for the assignment operation. This allow more flexibility around the definition of the aliases on project creation.
 
 ### Changes
 

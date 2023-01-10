@@ -26,7 +26,7 @@ public class ProjectConfigurationsParser {
    *         <code>false</code> otherwise
    */
   public static boolean isProjectConfiguration(JsonNode node) {
-    return node.has("importOptions") || node.has("operations");
+    return node.has("importOptions") || node.has("operations") || node.has("aliases");
   }
 
   /**

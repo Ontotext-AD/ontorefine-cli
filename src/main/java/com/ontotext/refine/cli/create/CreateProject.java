@@ -90,13 +90,13 @@ public class CreateProject extends Process {
 
       projectId = response.getProjectId();
 
-      boolean hasAssignedAliases =
-          assignAliases(projectId, extractAliases(aliases, configurations), client);
+      String[] extractedAliases = extractAliases(aliases, configurations);
+      boolean hasAssignedAliases = assignAliases(projectId, extractedAliases, client);
 
       info("Successfully created project with identifier: %s", projectId);
 
       if (hasAssignedAliases) {
-        info("and aliases: %s", String.join(",", aliases));
+        info("and aliases: %s", String.join(",", extractedAliases));
       }
 
       return ExitCode.OK;

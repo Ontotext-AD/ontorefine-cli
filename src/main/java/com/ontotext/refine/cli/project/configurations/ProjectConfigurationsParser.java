@@ -150,10 +150,8 @@ public class ProjectConfigurationsParser {
     }
 
     private static Optional<JsonNode> detectOperations(JsonNode json) {
-      if (containsOperations(json)) {
-        if (json.isArray()) {
-          return Optional.of(json);
-        }
+      if (containsOperations(json) && json.isArray()) {
+        return Optional.of(json);
       }
 
       // when the array is wrapped in an object, try to unwrap it

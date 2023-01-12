@@ -18,7 +18,7 @@ workflow. An example of such workflow is the transformation of dataset to RDF.
  <dependency>
      <groupId>com.ontotext</groupId>
      <artifactId>ontorefine-cli</artifactId>
-     <version>1.1.1</version>
+     <version>1.2.0</version>
  </dependency>
 ```
 

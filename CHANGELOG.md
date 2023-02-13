@@ -1,5 +1,19 @@
 # Ontotext Refine CLI
 
+## Version 1.2.1
+
+### New
+
+ - Introduced additional upload formats for `create-project` and `transform` commands. Now the commands should work with more complete set of formats,
+   except CSV.
+   Although the Refine supports the formats, they are introduced in experimental state for the CLI as there are not tested extensively and there could be some
+   issues with them.
+
+### Changes
+
+ - Updated the versions of the third party dependencies to the latest available.
+
+
 ## Version 1.2
 
 ### New

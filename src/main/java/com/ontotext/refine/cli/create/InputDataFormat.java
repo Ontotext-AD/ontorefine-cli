@@ -10,7 +10,15 @@ import com.ontotext.refine.client.UploadFormat;
  */
 public enum InputDataFormat {
 
-  CSV(UploadFormat.SEPARATOR_BASED);
+  CSV(UploadFormat.SEPARATOR_BASED),
+
+  TSV(UploadFormat.SEPARATOR_BASED),
+
+  EXCEL(UploadFormat.EXCEL),
+
+  JSON(UploadFormat.JSON),
+
+  XML(UploadFormat.XML);
 
   // TODO: more for the next releases
 

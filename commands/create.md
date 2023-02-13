@@ -19,7 +19,8 @@ Creates a new project from a file.
 Parameters:
       FILE                The file that will be used to create the project. It
                             should be a full name with one of the supported
-                            extensions (csv).
+                            extensions (csv, tsv, json, txt, xls, xlsx, js,
+                            etc.).
 
 Options:
   -u, --url <url>         The URL of the Ontotext Refine instance to connect
@@ -27,7 +28,9 @@ Options:
   -n, --name <name>       A name for the Refine project. If not provided, the
                             file name will be used.
   -f, --format <format>   The format of the provided file. The default format
-                            is 'csv'. The allowed values are: csv
+                            is 'csv'. Except 'csv', all other formats are in
+                            experimental state. The allowed values are: csv,
+                            tsv, excel, json, xml
   -c, --configurations <configurations>
                           File containing configurations for the importing
                             process of the dataset. It includes information how

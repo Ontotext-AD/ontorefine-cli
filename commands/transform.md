@@ -29,13 +29,16 @@ Transforms given dataset into different data format.
 Parameters:
       FILE                The file containing the data that should be
                             transformed. It should be a full name with one of
-                            the supported extensions: (csv).
+                            the supported extensions: (csv, tsv, json, txt,
+                            xls, xlsx, js, etc.).
 
 Options:
   -u, --url <url>         The URL of the Ontotext Refine instance to connect
                             to, e.g. http://localhost:7333.
   -f, --format <format>   The format of the provided file. The default format
-                            is 'csv'. The allowed values are: csv
+                            is 'csv'. Except 'csv', all other formats are in
+                            experimental state. The allowed values are: csv,
+                            tsv, excel, json, xml
   -c, --configurations <configurations>
                           A file with the configurations that should be used
                             for project creation. Ideally it should contain the

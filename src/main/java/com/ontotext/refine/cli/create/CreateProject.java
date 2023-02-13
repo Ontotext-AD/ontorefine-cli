@@ -46,7 +46,7 @@ public class CreateProject extends Process {
       paramLabel = "FILE",
       description = "The file that will be used to create the project."
           + " It should be a full name with one of the supported extensions"
-          + " (csv).") // tsv, , json, txt, xls, xlsx, ods
+          + " (csv, tsv, json, txt, xls, xlsx, js, etc.).")
   private File file;
 
   @Option(
@@ -57,6 +57,7 @@ public class CreateProject extends Process {
   @Option(
       names = {"-f", "--format"},
       description = "The format of the provided file. The default format is '${DEFAULT-VALUE}'."
+          + " Except 'csv', all other formats are in experimental state."
           + " The allowed values are: ${COMPLETION-CANDIDATES}",
       completionCandidates = AllowedInputDataFormats.class,
       defaultValue = "csv")

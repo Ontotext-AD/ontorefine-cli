@@ -65,12 +65,13 @@ public class Transform extends Process {
       paramLabel = "FILE",
       description = "The file containing the data that should be transformed."
           + " It should be a full name with one of the supported extensions:"
-          + " (csv).")
+          + " (csv, tsv, json, txt, xls, xlsx, js, etc.).")
   private File file;
 
   @Option(
       names = {"-f", "--format"},
       description = "The format of the provided file. The default format is '${DEFAULT-VALUE}'."
+          + " Except 'csv', all other formats are in experimental state."
           + " The allowed values are: ${COMPLETION-CANDIDATES}",
       completionCandidates = AllowedInputDataFormats.class,
       defaultValue = "csv")
@@ -164,7 +165,8 @@ public class Transform extends Process {
   private String createProject(RefineClient client) throws IOException {
     String currentDate = DateTimeFormatter.ISO_LOCAL_DATE.format(LocalDate.now());
     Builder command = RefineCommands
-        .createProject().file(file)
+        .createProject()
+        .file(file)
         .format(format.toUploadFormat())
         .name(format("cli-transform-%s-%s", file.getName(), currentDate))
         .token(getToken());

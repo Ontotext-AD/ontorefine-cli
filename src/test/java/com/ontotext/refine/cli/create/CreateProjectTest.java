@@ -21,7 +21,6 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.protocol.HttpRequestHandler;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import picocli.CommandLine.ExitCode;
 
@@ -84,13 +83,13 @@ class CreateProjectTest extends BaseProcessTest {
       URL resource = getClass().getClassLoader().getResource("Netherlands_restaurants.csv");
 
       String uriArg = "-u " + responder.getUri();
-      commandExecutor().accept(args(resource.getPath(), "-n Restaurants", "-f tsv", uriArg));
+      commandExecutor().accept(args(resource.getPath(), "-n Restaurants", "-f ods", uriArg));
     } finally {
       String[] errorsArray = consoleErrors().split(System.lineSeparator());
       String lastLine = errorsArray[0];
       assertEquals(
-          "Invalid value for option '--format': expected one of [CSV] (case-insensitive)"
-              + " but was 'tsv'",
+          "Invalid value for option '--format': expected one of [CSV, TSV, EXCEL, JSON, XML]"
+              + " (case-insensitive) but was 'ods'",
           lastLine);
     }
   }
@@ -176,7 +175,6 @@ class CreateProjectTest extends BaseProcessTest {
     }
   }
 
-  @Disabled("Not yet introduced.")
   @Test
   @ExpectedSystemExit(ExitCode.OK)
   void shouldPassSuccessfully_xml() {

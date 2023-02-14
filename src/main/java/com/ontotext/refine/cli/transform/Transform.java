@@ -64,7 +64,7 @@ public class Transform extends Process {
       paramLabel = "FILE",
       description = "The file containing the data that should be transformed."
           + " It should be a full name with one of the supported extensions:"
-          + " (csv, tsv, json, txt, xls, xlsx, js, etc.).")
+          + " (csv, tsv, json, xls, xlsx, etc.).")
   private File file;
 
   @Option(

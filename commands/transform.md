@@ -29,8 +29,8 @@ Transforms given dataset into different data format.
 Parameters:
       FILE                The file containing the data that should be
                             transformed. It should be a full name with one of
-                            the supported extensions: (csv, tsv, json, txt,
-                            xls, xlsx, js, etc.).
+                            the supported extensions: (csv, tsv, json, xls,
+                            xlsx, etc.).
 
 Options:
   -u, --url <url>         The URL of the Ontotext Refine instance to connect

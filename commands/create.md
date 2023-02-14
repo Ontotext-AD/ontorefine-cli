@@ -19,8 +19,7 @@ Creates a new project from a file.
 Parameters:
       FILE                The file that will be used to create the project. It
                             should be a full name with one of the supported
-                            extensions (csv, tsv, json, txt, xls, xlsx, js,
-                            etc.).
+                            extensions (csv, tsv, json, xls, xlsx, etc.).
 
 Options:
   -u, --url <url>         The URL of the Ontotext Refine instance to connect

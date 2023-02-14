@@ -3,8 +3,6 @@ package com.ontotext.refine.cli.transform;
 import static com.ontotext.refine.cli.operations.OperationsUtil.getOperations;
 import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.assignAliases;
 import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.extractAliases;
-import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration.IMPORT_OPTIONS;
-import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
 import static com.ontotext.refine.cli.utils.ExportUtils.awaitProcessesCompletion;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
 import static com.ontotext.refine.cli.utils.PrintUtils.info;
@@ -15,6 +13,7 @@ import static java.lang.String.format;
 
 import com.ontotext.refine.cli.Process;
 import com.ontotext.refine.cli.create.AllowedInputDataFormats;
+import com.ontotext.refine.cli.create.ImportOptionsProcessor;
 import com.ontotext.refine.cli.create.InputDataFormat;
 import com.ontotext.refine.cli.export.rdf.AllowedRdfResultFormat;
 import com.ontotext.refine.cli.export.rdf.RdfResultFormats;
@@ -171,9 +170,8 @@ public class Transform extends Process {
         .name(format("cli-transform-%s-%s", file.getName(), currentDate))
         .token(getToken());
 
-    if (configurations != null) {
-      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::toString));
-    }
+    ImportOptionsProcessor.validateAndConsume(
+        configurations, format, opts -> command.options(opts::toString));
 
     return command.build().execute(client).getProjectId();
   }

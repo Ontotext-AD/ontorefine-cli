@@ -197,6 +197,64 @@ class CreateProjectTest extends BaseProcessTest {
     }
   }
 
+  @Test
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
+  void shouldFail_missingConfigurationsForXml() {
+    try {
+      URL resource = getClass().getClassLoader().getResource("test-example.xml");
+
+      String uriArg = "-u " + responder.getUri();
+      commandExecutor().accept(args(resource.getPath(), "-n test-xml", "-f xml", uriArg));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals(
+          "There should be configuration with import options for file format: xml",
+          lastLine);
+    }
+  }
+
+  @Test
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
+  void shouldFail_missingImportOptionsInConfiguration() {
+    try {
+      URL resource = getClass().getClassLoader().getResource("test-example.xml");
+      URL configurations = getClass().getClassLoader()
+          .getResource("invalid-configurations/xml-without-import-opts.json");
+
+      String uriArg = "-u " + responder.getUri();
+      String configsArg = "-c " + configurations.getPath();
+      commandExecutor()
+          .accept(args(resource.getPath(), "-n test-xml", "-f xml", configsArg, uriArg));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals("Import options configurations are required for files of type: xml", lastLine);
+    }
+  }
+
+  @Test
+  @ExpectedSystemExit(ExitCode.SOFTWARE)
+  void shouldFail_invalidImportConfigurations() {
+    try {
+      URL resource = getClass().getClassLoader().getResource("test-example.xml");
+      URL importOptsJson = getClass().getClassLoader()
+          .getResource("invalid-configurations/xml-without-recordPath-property.json");
+
+      String uriArg = "-u " + responder.getUri();
+      String importOptsArg = "-c " + importOptsJson.getPath();
+      commandExecutor()
+          .accept(args(resource.getPath(), "-n test-xml", "-f xml", importOptsArg, uriArg));
+    } finally {
+      String[] errorsArray = consoleErrors().split(System.lineSeparator());
+      String lastLine = errorsArray[errorsArray.length - 1];
+      assertEquals(
+          "The import options should contain property 'recordPath' of type Array, containing set of"
+              + " elements to be used for parsing of the dataset in tabular format.",
+          lastLine);
+    }
+  }
+
   private static Map<String, HttpRequestHandler> mockResponses() {
     Map<String, HttpRequestHandler> responses = new HashMap<>(4);
     HandlerContext context = new HandlerContext().setFailCsrfRequest(() -> failCsrfRequest);

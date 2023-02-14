@@ -2,8 +2,6 @@ package com.ontotext.refine.cli.create;
 
 import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.assignAliases;
 import static com.ontotext.refine.cli.project.aliases.ProjectAliasesUtils.extractAliases;
-import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.Configuration.IMPORT_OPTIONS;
-import static com.ontotext.refine.cli.project.configurations.ProjectConfigurationsParser.get;
 import static com.ontotext.refine.cli.utils.PrintUtils.error;
 import static com.ontotext.refine.cli.utils.PrintUtils.info;
 
@@ -118,12 +116,12 @@ public class CreateProject extends Process {
         .name(StringUtils.defaultIfBlank(name, file.getName()))
         .token(getToken());
 
-    if (configurations != null) {
-      get(configurations, IMPORT_OPTIONS).ifPresent(opts -> command.options(opts::toString));
-    }
+    ImportOptionsProcessor.validateAndConsume(
+        configurations, format, opts -> command.options(opts::toString));
 
     return command.build().execute(client);
   }
+
 
   private void handleError(String projectId, RefineClient client, String message)
       throws RefineException {

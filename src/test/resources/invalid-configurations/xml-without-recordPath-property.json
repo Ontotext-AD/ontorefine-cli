@@ -1,0 +1,34 @@
+{
+  "importOptions": [
+    {
+      "limit": -1,
+      "trimStrings": false,
+      "guessCellValueTypes": false,
+      "storeEmptyStrings": true,
+      "includeFileSources": false,
+      "includeArchiveFileName": false,
+      "disableAutoPreview": false,
+      "projectName": "test-example-xml",
+      "projectTags": [
+        "xml"
+      ],
+      "fileSource": "test-example.xml",
+      "archiveFileName": null
+    }
+  ],
+  "operations": [
+    {
+      "op": "core/text-transform",
+      "engineConfig": {
+        "facets": [],
+        "mode": "row-based"
+      },
+      "columnName": "Tests - Test - TestId",
+      "expression": "grel:value.substring(3)",
+      "onError": "keep-original",
+      "repeat": false,
+      "repeatCount": 10,
+      "description": "Text transform on cells in column Tests - Test - TestId using expression grel:value.substring(3)"
+    }
+  ]
+}

@@ -8,6 +8,16 @@
    except CSV.
    Although the Refine supports the formats, they are introduced in experimental state for the CLI as there are not tested extensively and there could be some
    issues with them.
+ - Added validation for the import options for some of the allowed input data formats. The `XML` and `JSON` datasets require specific import option to be
+   present during the importing process. This property is called `recordPath` and it contains set of values describing the path in which the file will be parsed
+   in order to be represented in tabular form.
+
+   The validation is needed, because of a bug in the `OpenRefine` logic, where the errors caused from the missing property are ignored and the response from the
+   project creation is OK, although in actuality there isn't any project created.
+
+   Now when the user provides invalid configurations for the import options, (s)he will receive an error notifying that the import options are wrong or missing.
+
+   This should be temporary solution, but.. yeah we all know how this goes. :)
 
 ### Changes
 

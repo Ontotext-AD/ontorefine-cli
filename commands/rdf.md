@@ -40,6 +40,8 @@ Options:
   -V, --version             Print version information and exit.
 ```
 
+If both `-q` and `-m` are specified, `-q` takes precedence.
+
 ## Examples
 
 TBD
